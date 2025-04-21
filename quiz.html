@@ -112,18 +112,18 @@ document.addEventListener('DOMContentLoaded', function() {
   let correctCount = 0;
   let totalCount = 0;
   let answered = false;
-  let wrongAnswers = [];
+  let wrongAnswers = JSON.parse(localStorage.getItem('wrongAnswers')) || [];
   let isWrongNoteMode = false;
 
   const params = new URLSearchParams(window.location.search);
-  const mode = params.get('mode') || 'normal'; 
+  const mode = params.get('mode') || 'normal';
 
   if (mode === 'wrongnote') {
     isWrongNoteMode = true;
     currentProblems = [...wrongAnswers];
   } else {
     isWrongNoteMode = false;
-    currentProblems = [...problems]; // problems는 절대 건드리지 않는다
+    currentProblems = [...problems];
   }
 
   function updateScoreboard() {
@@ -169,7 +169,8 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('feedback').innerText = '정답입니다! 🎯';
       document.getElementById('feedback').style.color = 'green';
     } else {
-      wrongAnswers.push({...currentProblems[current]}); 
+      wrongAnswers.push({...currentProblems[current]});
+      localStorage.setItem('wrongAnswers', JSON.stringify(wrongAnswers));
       document.getElementById('feedback').innerText = '오답입니다 😢 정답은 (' + correct + ')입니다.';
       document.getElementById('feedback').style.color = 'red';
     }
@@ -181,11 +182,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function resetWrongNote() {
     wrongAnswers = [];
+    localStorage.removeItem('wrongAnswers');
     currentProblems = [];
     correctCount = 0;
     totalCount = 0;
     alert("오답노트가 초기화되었습니다! ✈️ 메인페이지로 이동합니다.");
-    window.location.href = "./index.html"; 
+    window.location.href = "./index.html";
   }
 
   updateMode();
