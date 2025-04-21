@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question ✈️ 문제풀기 (FINAL PERFECT)</title>
+  <title>ATP Random Question ✈️ 문제풀기 (FINAL CORRECT FIX)</title>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
   <style>
     body {
@@ -120,6 +120,10 @@ let correctCount = 0;
 let totalCount = 0;
 let answered = false;
 
+function normalize(str) {
+  return str.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
 function setupQuiz(loadedProblems) {
   if (mode === 'wrongnote') {
     currentProblems = wrongNotes.length > 0 ? [...wrongNotes] : [];
@@ -168,8 +172,10 @@ function checkAnswer(selected) {
   if (answered) return;
   answered = true;
   totalCount += 1;
+
   const correct = currentProblems[current].correct;
-  if (selected.trim() === correct.trim()) {
+
+  if (normalize(selected) === normalize(correct)) {
     correctCount += 1;
     document.getElementById('feedback').innerText = '정답입니다! 🎯';
     document.getElementById('feedback').style.color = 'green';
@@ -181,6 +187,7 @@ function checkAnswer(selected) {
       localStorage.setItem('wrongNotes', JSON.stringify(wrongNotes));
     }
   }
+
   document.getElementById('answer').innerText = currentProblems[current].explanation || "";
   document.getElementById('answer').style.display = 'block';
   currentProblems.splice(current, 1);
