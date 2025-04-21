@@ -4,16 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question - 문제풀기</title>
+  <title>ATP Random Question ✈️</title>
   <style>
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background: linear-gradient(to bottom, #87CEFA, #f0f8ff);
+    body {
       margin: 0;
-      padding: 1rem;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #87CEFA, #f0f8ff);
       display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      align-items: start;
       min-height: 100vh;
     }
     .card {
@@ -106,6 +107,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  let currentProblems = [];
   let current = 0;
   let correctCount = 0;
   let totalCount = 0;
@@ -113,18 +115,15 @@ document.addEventListener('DOMContentLoaded', function() {
   let wrongAnswers = [];
   let isWrongNoteMode = false;
 
-  // URL에서 mode 읽기
   const params = new URLSearchParams(window.location.search);
-  const mode = params.get('mode') || 'normal'; // 기본은 normal 모드
+  const mode = params.get('mode') || 'normal'; 
 
   if (mode === 'wrongnote') {
-    // 오답노트 모드
     isWrongNoteMode = true;
-    problems = [...wrongAnswers];  // 오답리스트로 문제 설정 (처음엔 비어있을 수도)
+    currentProblems = [...wrongAnswers];
   } else {
-    // 일반 모드
     isWrongNoteMode = false;
-    problems = [...problems]; // 기존 전체 문제
+    currentProblems = [...problems]; // problems는 절대 건드리지 않는다
   }
 
   function updateScoreboard() {
@@ -138,19 +137,19 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function nextQuestion() {
-    if (problems.length === 0) {
+    if (currentProblems.length === 0) {
       document.getElementById('question').innerText = "모든 문제를 다 풀었습니다! 🎯";
       document.getElementById('choices').innerHTML = '';
       document.getElementById('next-btn').style.display = 'none';
       return;
     }
-    const randomIndex = Math.floor(Math.random() * problems.length);
+    const randomIndex = Math.floor(Math.random() * currentProblems.length);
     current = randomIndex;
     answered = false;
-    document.getElementById('question').innerText = problems[randomIndex].question;
+    document.getElementById('question').innerText = currentProblems[randomIndex].question;
     const choicesDiv = document.getElementById('choices');
     choicesDiv.innerHTML = '';
-    problems[randomIndex].choices.forEach(choice => {
+    currentProblems[randomIndex].choices.forEach(choice => {
       const btn = document.createElement('button');
       btn.textContent = choice;
       btn.onclick = () => checkAnswer(choice.charAt(0));
@@ -164,29 +163,29 @@ document.addEventListener('DOMContentLoaded', function() {
     if (answered) return;
     answered = true;
     totalCount += 1;
-    const correct = problems[current].correct;
+    const correct = currentProblems[current].correct;
     if (selected === correct) {
       correctCount += 1;
       document.getElementById('feedback').innerText = '정답입니다! 🎯';
       document.getElementById('feedback').style.color = 'green';
     } else {
-      wrongAnswers.push({...problems[current]}); 
+      wrongAnswers.push({...currentProblems[current]}); 
       document.getElementById('feedback').innerText = '오답입니다 😢 정답은 (' + correct + ')입니다.';
       document.getElementById('feedback').style.color = 'red';
     }
-    document.getElementById('answer').innerText = problems[current].explanation;
+    document.getElementById('answer').innerText = currentProblems[current].explanation;
     document.getElementById('answer').style.display = 'block';
-    problems.splice(current, 1);
+    currentProblems.splice(current, 1);
     updateScoreboard();
   }
 
   function resetWrongNote() {
     wrongAnswers = [];
-    problems = [];
+    currentProblems = [];
     correctCount = 0;
     totalCount = 0;
     alert("오답노트가 초기화되었습니다! ✈️ 메인페이지로 이동합니다.");
-    window.location.href = "./index.html"; // 강제 메인페이지 이동
+    window.location.href = "./index.html"; 
   }
 
   updateMode();
