@@ -4,21 +4,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question 메인페이지</title>
+  <title>ATP Random Question ✈️</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f0f4f8; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
-    .container { text-align: center; }
-    h1 { font-size: 2rem; color: #333; margin-bottom: 2rem; }
-    button { margin: 1rem; padding: 1rem 2rem; font-size: 1.2rem; border: none; border-radius: 8px; cursor: pointer; }
-    .start-btn { background-color: #007BFF; color: white; }
-    .wrongnote-btn { background-color: #28a745; color: white; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #87CEFA, #f0f8ff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/7e/Airplane_silhouette.png');
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: 150px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: #004080;
+      margin-top: 200px;
+      text-align: center;
+    }
+    h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      margin: 1rem;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.3s;
+      width: 250px;
+      text-align: center;
+    }
+    .start-btn {
+      background-color: #007BFF;
+    }
+    .start-btn:hover {
+      background-color: #0056b3;
+    }
+    .wrongnote-btn {
+      background-color: #28a745;
+    }
+    .wrongnote-btn:hover {
+      background-color: #1e7e34;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>ATP Random Question</h1>
-    <button class="start-btn" onclick="location.href='quiz.html'">문제 풀기 시작</button><br>
-    <button class="wrongnote-btn" onclick="location.href='wrongnote.html'">오답노트 풀기</button>
-  </div>
+
+  <h1>ATP Random Question ✈️</h1>
+  <h2>비행을 준비하세요!</h2>
+
+  <a href="./quiz.html?mode=normal" class="btn start-btn">문제풀기 시작</a>
+  <a href="./quiz.html?mode=wrongnote" class="btn wrongnote-btn">오답노트 풀기</a>
+
 </body>
 </html>
