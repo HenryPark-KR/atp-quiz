@@ -87,14 +87,14 @@
 <body>
   <div class="card">
     <h1>ATP Random Question ✈️</h1>
-    <div id="scoreboard">현재까지 0문제 풀었고, 0문제 맞췄습니다. (정답률 0%)</div>
-    <div id="question">로딩 중...</div>
+    <div id="scoreboard">문제 로딩 중...</div>
+    <div id="question">잠시만 기다려주세요...</div>
     <div id="choices"></div>
     <div id="feedback"></div>
     <div id="answer"></div>
-    <button type="button" id="next-btn" class="action-btn">다음 문제</button>
-    <button type="button" id="home-btn" class="action-btn" onclick="location.href='./index.html'">메인페이지로 돌아가기</button>
-    <button type="button" id="reset-btn" class="action-btn" onclick="resetWrongNotes()">오답노트 초기화</button>
+    <button type="button" id="next-btn" class="action-btn" style="display:none;">다음 문제</button>
+    <button type="button" id="home-btn" class="action-btn" onclick="location.href='./index.html'" style="display:none;">메인페이지로 돌아가기</button>
+    <button type="button" id="reset-btn" class="action-btn" onclick="resetWrongNotes()" style="display:none;">오답노트 초기화</button>
   </div>
 
 <script>
@@ -121,15 +121,21 @@ script.onload = () => {
   if (mode === 'wrongnote') {
     problems = wrongNotes.length > 0 ? wrongNotes : [];
   }
-  startQuiz();
+  if (!problems || problems.length === 0) {
+    document.getElementById('question').innerText = "문제가 없습니다.";
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('home-btn').style.display = 'block';
+    document.getElementById('reset-btn').style.display = 'block';
+    return;
+  }
+  document.getElementById('next-btn').style.display = 'block';
+  document.getElementById('home-btn').style.display = 'block';
+  document.getElementById('reset-btn').style.display = 'block';
+  nextQuestion();
 };
 
 function startQuiz() {
-  if (!problems || problems.length === 0) {
-    document.getElementById('question').innerText = "문제가 없습니다.";
-    return;
-  }
-  nextQuestion();
+  updateScoreboard();
 }
 
 function updateScoreboard() {
@@ -139,11 +145,10 @@ function updateScoreboard() {
 }
 
 function nextQuestion() {
-  if (problems.length === 0) {
+  if (!problems || problems.length === 0) {
     document.getElementById('question').innerText = "모든 문제를 다 풀었습니다! 🎯";
     document.getElementById('choices').innerHTML = '';
     document.getElementById('next-btn').style.display = 'none';
-    localStorage.setItem('wrongNotes', JSON.stringify(wrongNotes));
     return;
   }
   const randomIndex = Math.floor(Math.random() * problems.length);
@@ -176,6 +181,7 @@ function checkAnswer(selected) {
     document.getElementById('feedback').style.color = 'red';
     if (mode === 'normal') {
       wrongNotes.push(problems[current]);
+      localStorage.setItem('wrongNotes', JSON.stringify(wrongNotes));
     }
   }
   document.getElementById('answer').innerText = problems[current].explanation || "";
