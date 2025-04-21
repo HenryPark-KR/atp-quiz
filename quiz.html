@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question ✈️ 문제풀기 (Bug Free)</title>
+  <title>ATP Random Question ✈️ 문제풀기 (REALLY FINAL)</title>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
   <style>
     body {
@@ -127,10 +127,10 @@ script.src = (book === 'flight_theory')
 document.head.appendChild(script);
 
 script.onload = () => {
-  allProblems = [...problems];
   if (mode === 'wrongnote') {
     problems = wrongNotes.length > 0 ? wrongNotes : [];
   }
+  allProblems = [...problems];
   if (!problems || problems.length === 0) {
     finishQuiz();
     return;
