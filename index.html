@@ -16,7 +16,8 @@
     #choices button:hover { background: #007BFF; color: white; }
     #feedback { margin-top: 1rem; font-weight: bold; font-size: 1.2rem; }
     #answer { margin-top: 1rem; display: none; font-size: 1rem; color: #555; white-space: pre-line; }
-    button.next-btn { margin-top: 2rem; background: #007BFF; color: white; border: none; border-radius: 5px; padding: 0.8rem 2rem; font-size: 1.2rem; display: block; margin-left: auto; margin-right: auto; }
+    button { margin-top: 1rem; background: #007BFF; color: white; border: none; border-radius: 5px; padding: 0.8rem 2rem; font-size: 1.2rem; display: block; margin-left: auto; margin-right: auto; }
+    #wrong-note-btn { display: none; background: #28a745; }
   </style>
   <script src="./problems.js"></script>
 </head>
@@ -28,7 +29,8 @@
     <div id="choices"></div>
     <div id="feedback"></div>
     <div id="answer"></div>
-    <button type="button" class="next-btn" id="next-btn">다음 문제</button>
+    <button type="button" id="next-btn">다음 문제</button>
+    <button type="button" id="wrong-note-btn">오답노트 풀기</button>
   </div>
 
 <script>
@@ -37,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
   let correctCount = 0;
   let totalCount = 0;
   let answered = false;
+  let wrongAnswers = [];
+  let originalProblems = [...problems]; // 처음 전체 문제 백업
 
   function updateScoreboard() {
     let percentage = totalCount === 0 ? 0 : Math.round((correctCount / totalCount) * 100);
@@ -45,6 +49,15 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function nextQuestion() {
+    if (problems.length === 0) {
+      document.getElementById('question').innerText = "모든 문제를 다 풀었습니다! 🎯";
+      document.getElementById('choices').innerHTML = '';
+      document.getElementById('next-btn').style.display = 'none';
+      if (wrongAnswers.length > 0) {
+        document.getElementById('wrong-note-btn').style.display = 'block';
+      }
+      return;
+    }
     const randomIndex = Math.floor(Math.random() * problems.length);
     current = randomIndex;
     answered = false;
@@ -62,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function checkAnswer(selected) {
-    if (answered) return; // 이미 답변했으면 더이상 점수 반영 안함
+    if (answered) return;
     answered = true;
     totalCount += 1;
     const correct = problems[current].correct;
@@ -71,21 +84,37 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('feedback').innerText = '정답입니다! 🎯';
       document.getElementById('feedback').style.color = 'green';
     } else {
+      wrongAnswers.push(problems[current]);
       document.getElementById('feedback').innerText = '오답입니다 😢 정답은 (' + correct + ')입니다.';
       document.getElementById('feedback').style.color = 'red';
     }
     document.getElementById('answer').innerText = problems[current].explanation;
     document.getElementById('answer').style.display = 'block';
-    updateScoreboard(); // 점수판 업데이트
+    problems.splice(current, 1); // 현재 문제 제거
+    updateScoreboard();
+  }
+
+  function startWrongNote() {
+    if (wrongAnswers.length === 0) {
+      alert("오답이 없습니다! 🎯");
+      return;
+    }
+    problems = [...wrongAnswers]; // 오답 문제로 덮기
+    wrongAnswers = [];
+    correctCount = 0;
+    totalCount = 0;
+    updateScoreboard();
+    document.getElementById('wrong-note-btn').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'block';
+    nextQuestion();
   }
 
   // 처음 문제 표시
   nextQuestion();
   updateScoreboard();
 
-  // "다음 문제" 버튼에 이벤트 리스너 연결
-  const nextBtn = document.getElementById('next-btn');
-  nextBtn.addEventListener('click', nextQuestion);
+  document.getElementById('next-btn').addEventListener('click', nextQuestion);
+  document.getElementById('wrong-note-btn').addEventListener('click', startWrongNote);
 });
 </script>
 
