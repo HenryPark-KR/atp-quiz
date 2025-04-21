@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question ✈️ 문제풀기 (PRO LEVEL)</title>
+  <title>ATP Random Question ✈️ 문제풀기 (FINAL PERFECT)</title>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
   <style>
     body {
@@ -108,7 +108,6 @@
   </div>
 
 <script>
-let problems = [];
 const params = new URLSearchParams(window.location.search);
 const book = params.get('book') || 'atp';
 const mode = params.get('mode') || 'normal';
@@ -121,11 +120,11 @@ let correctCount = 0;
 let totalCount = 0;
 let answered = false;
 
-function setupQuiz() {
+function setupQuiz(loadedProblems) {
   if (mode === 'wrongnote') {
     currentProblems = wrongNotes.length > 0 ? [...wrongNotes] : [];
   } else {
-    currentProblems = [...problems];
+    currentProblems = [...loadedProblems];
   }
 
   if (!currentProblems || currentProblems.length === 0) {
@@ -204,7 +203,7 @@ function resetWrongNotes() {
   location.href = './index.html';
 }
 
-// 문제 데이터 스크립트 로딩
+// 문제 데이터 로딩
 const script = document.createElement('script');
 script.src = (book === 'flight_theory') 
   ? 'https://henrypark-kr.github.io/atp-quiz/problems_flight_theory.js' 
@@ -212,7 +211,7 @@ script.src = (book === 'flight_theory')
 document.head.appendChild(script);
 
 script.onload = () => {
-  setupQuiz();  // 데이터 로드 완료 후 문제 출제 시작
+  setupQuiz(problems); // 로딩된 problems 배열로 시작
 };
 
 document.getElementById('next-btn').addEventListener('click', nextQuestion);
