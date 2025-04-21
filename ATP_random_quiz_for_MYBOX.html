@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATP random Question - 네이버 MYBOX용</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 1rem; background: #f9f9f9; }
+    .card { border: 1px solid #ccc; padding: 1.5rem; border-radius: 10px; background: white; max-width: 90%; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: left; }
+    h1 { font-size: 1.6rem; text-align: center; margin-bottom: 1rem; }
+    #question { font-size: 1.2rem; margin-bottom: 1rem; }
+    #choices { display: flex; flex-direction: column; align-items: flex-start; }
+    #choices button { margin: 0.4rem 0; padding: 0.7rem 1rem; font-size: 1.1rem; width: 100%; text-align: left; border: 1px solid #007BFF; border-radius: 5px; background: #fff; }
+    #choices button:hover { background: #007BFF; color: white; }
+    #feedback { margin-top: 1rem; font-weight: bold; font-size: 1.2rem; }
+    #answer { margin-top: 1rem; display: none; font-size: 1rem; color: #555; white-space: pre-line; }
+    button.next-btn { margin-top: 2rem; background: #007BFF; color: white; border: none; border-radius: 5px; padding: 0.8rem 2rem; font-size: 1.2rem; display: block; margin-left: auto; margin-right: auto; }
+  </style>
+  <script src="problems.js"></script>
+</head>
+<body>
+  <div class="card">
+    <h1>ATP random Question (네이버 MYBOX용)</h1>
+    <div id="question">로딩 중...</div>
+    <div id="choices"></div>
+    <div id="feedback"></div>
+    <div id="answer"></div>
+    <button class="next-btn" onclick="nextQuestion()">다음 문제</button>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  let current = 0;
+
+  function nextQuestion() {
+    const randomIndex = Math.floor(Math.random() * problems.length);
+    current = randomIndex;
+    document.getElementById('question').innerText = problems[randomIndex].question;
+    const choicesDiv = document.getElementById('choices');
+    choicesDiv.innerHTML = '';
+    problems[randomIndex].choices.forEach(choice => {
+      const btn = document.createElement('button');
+      btn.textContent = choice;
+      btn.onclick = () => checkAnswer(choice.charAt(0));
+      choicesDiv.appendChild(btn);
+    });
+    document.getElementById('feedback').innerText = '';
+    document.getElementById('answer').style.display = 'none';
+  }
+
+  function checkAnswer(selected) {
+    const correct = problems[current].correct;
+    if (selected === correct) {
+      document.getElementById('feedback').innerText = '정답입니다! 🎯';
+      document.getElementById('feedback').style.color = 'green';
+    } else {
+      document.getElementById('feedback').innerText = '오답입니다 😢 정답은 (' + correct + ')입니다.';
+      document.getElementById('feedback').style.color = 'red';
+    }
+    document.getElementById('answer').innerText = problems[current].explanation;
+    document.getElementById('answer').style.display = 'block';
+  }
+
+  nextQuestion(); // 처음 문제 표시
+});
+</script>
+
+</body>
+</html>
