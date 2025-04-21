@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question ✈️ 문제풀기</title>
+  <title>ATP Random Question ✈️ 문제풀기 (디버그 모드)</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,54 +25,9 @@
       max-width: 600px;
       text-align: center;
     }
-    h1 {
-      font-size: 2rem;
-      color: #004080;
-      margin-bottom: 0.5rem;
-    }
-    #scoreboard {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      color: #333;
-    }
-    #question {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-    }
-    #choices {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-    }
-    #choices button {
-      margin: 0.5rem 0;
-      padding: 0.8rem 1rem;
-      font-size: 1.1rem;
-      border-radius: 10px;
-      border: 2px solid #007BFF;
-      background: white;
-      color: black;
-      transition: background 0.3s, color 0.3s;
-    }
-    #choices button:hover {
-      background: #007BFF;
-      color: white;
-    }
-    #feedback {
-      margin-top: 1rem;
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-    #answer {
-      margin-top: 1rem;
-      display: none;
-      font-size: 1rem;
-      color: #555;
-      white-space: pre-line;
-    }
     button.action-btn {
       margin-top: 1rem;
-      padding: 0.8rem 1rem;
+      padding: 1rem;
       font-size: 1.2rem;
       border: none;
       border-radius: 10px;
@@ -117,6 +72,9 @@ script.src = (book === 'flight_theory') ? './problems_flight_theory.js' : './pro
 document.head.appendChild(script);
 
 script.onload = () => {
+  console.log('✅ 문제집 스크립트 로드 완료!');
+  console.log('problems 내용:', problems);
+
   allProblems = [...problems];
   if (mode === 'wrongnote') {
     problems = wrongNotes.length > 0 ? wrongNotes : [];
