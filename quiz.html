@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question ✈️ 문제풀기 (FINAL ANSWER FIX)</title>
+  <title>ATP Random Question ✈️ 문제풀기 (FINAL ALL FIX)</title>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
   <style>
     body {
@@ -120,13 +120,29 @@ let correctCount = 0;
 let totalCount = 0;
 let answered = false;
 
-function extractCorrectLetter(answerText) {
-  const match = answerText.match(/\(([A-D])\)/);
-  return match ? match[1] : '';
+function extractCorrectAnswer(problem) {
+  if (book === 'atp') {
+    const match = problem.correct.match(/\(([A-D])\)/);
+    return match ? match[1] : '';
+  } else {
+    const match = problem.correct.match(/답[:：]\s*(\d)/);
+    return match ? match[1] : '';
+  }
 }
 
-function getChoiceLetter(str) {
-  return str.trim().charAt(0).toUpperCase();
+function getSelectedAnswer(selectedText) {
+  if (book === 'atp') {
+    return selectedText.trim().charAt(0).toUpperCase();
+  } else {
+    const firstChar = selectedText.trim().charAt(0);
+    switch (firstChar) {
+      case '①': return '1';
+      case '②': return '2';
+      case '③': return '3';
+      case '④': return '4';
+      default: return '';
+    }
+  }
 }
 
 function setupQuiz(loadedProblems) {
@@ -178,15 +194,15 @@ function checkAnswer(selected) {
   answered = true;
   totalCount += 1;
 
-  const selectedLetter = getChoiceLetter(selected);
-  const correctLetter = extractCorrectLetter(currentProblems[current].correct);
+  const correct = extractCorrectAnswer(currentProblems[current]);
+  const selectedValue = getSelectedAnswer(selected);
 
-  if (selectedLetter === correctLetter) {
+  if (selectedValue === correct) {
     correctCount += 1;
     document.getElementById('feedback').innerText = '정답입니다! 🎯';
     document.getElementById('feedback').style.color = 'green';
   } else {
-    document.getElementById('feedback').innerText = `오답입니다 😢 정답은 (${correctLetter})입니다.`;
+    document.getElementById('feedback').innerText = `오답입니다 😢 정답은 (${correct})입니다.`;
     document.getElementById('feedback').style.color = 'red';
     if (mode === 'normal') {
       wrongNotes.push(currentProblems[current]);
