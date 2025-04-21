@@ -28,7 +28,7 @@
     #feedback { margin-top: 1rem; font-weight: bold; font-size: 1.2rem; }
     #answer { margin-top: 1rem; display: none; font-size: 1rem; color: #555; white-space: pre-line; }
     button { margin-top: 1rem; background: #007BFF; color: white; border: none; border-radius: 5px; padding: 0.8rem 2rem; font-size: 1.2rem; display: block; margin-left: auto; margin-right: auto; }
-    #wrong-note-btn { display: none; background: #28a745; }
+    #wrong-note-btn { background: #28a745; }
   </style>
   <script src="./problems.js"></script>
 </head>
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let totalCount = 0;
   let answered = false;
   let wrongAnswers = [];
-  let originalProblems = [...problems]; // 처음 전체 문제 백업
+  let originalProblems = [...problems];
 
   function updateScoreboard() {
     let percentage = totalCount === 0 ? 0 : Math.round((correctCount / totalCount) * 100);
@@ -64,13 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('question').innerText = "모든 문제를 다 풀었습니다! 🎯";
       document.getElementById('choices').innerHTML = '';
       document.getElementById('next-btn').style.display = 'none';
-      if (wrongAnswers.length > 0) {
-        document.getElementById('wrong-note-btn').style.display = 'block';
-      } else {
-        document.getElementById('wrong-note-btn').style.display = 'block';
-        document.getElementById('wrong-note-btn').innerText = '모든 문제 정답! 다시 풀기';
-        document.getElementById('wrong-note-btn').onclick = function() { window.location.href = './index.html'; };
-      }
       return;
     }
     const randomIndex = Math.floor(Math.random() * problems.length);
@@ -111,8 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function startWrongNote() {
     if (wrongAnswers.length === 0) {
-      alert("오답이 없습니다! 🎯 다시 메인페이지로 돌아갑니다.");
-      window.location.href = './index.html';
+      alert("현재까지 오답이 없습니다! 🎯");
       return;
     }
     problems = [...wrongAnswers];
@@ -120,8 +112,6 @@ document.addEventListener('DOMContentLoaded', function() {
     correctCount = 0;
     totalCount = 0;
     updateScoreboard();
-    document.getElementById('wrong-note-btn').style.display = 'none';
-    document.getElementById('next-btn').style.display = 'block';
     nextQuestion();
   }
 
