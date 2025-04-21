@@ -92,7 +92,8 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('feedback').innerText = '정답입니다! 🎯';
       document.getElementById('feedback').style.color = 'green';
     } else {
-      wrongAnswers.push(problems[current]);
+      // 깊은 복사로 오답 저장!!
+      wrongAnswers.push({...problems[current]});
       document.getElementById('feedback').innerText = '오답입니다 😢 정답은 (' + correct + ')입니다.';
       document.getElementById('feedback').style.color = 'red';
     }
