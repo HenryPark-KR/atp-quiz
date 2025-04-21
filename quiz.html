@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('feedback').innerText = '정답입니다! 🎯';
       document.getElementById('feedback').style.color = 'green';
     } else {
-      wrongAnswers.push({...problems[current]}); 
+      wrongAnswers.push({...problems[current]});
       document.getElementById('feedback').innerText = '오답입니다 😢 정답은 (' + correct + ')입니다.';
       document.getElementById('feedback').style.color = 'red';
     }
@@ -186,6 +186,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function resetWrongNote() {
     wrongAnswers = [];
+    problems = [];
+    correctCount = 0;
+    totalCount = 0;
+    isWrongNoteMode = false;
+    document.getElementById('mode').innerText = '';
+    document.getElementById('question').innerText = "오답노트가 초기화되었습니다! ✈️";
+    document.getElementById('choices').innerHTML = '';
+    document.getElementById('feedback').innerText = '';
+    document.getElementById('answer').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
     alert("오답노트가 초기화되었습니다! ✈️");
   }
 
