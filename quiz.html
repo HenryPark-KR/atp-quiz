@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question ✈️ 문제풀기 (디버그 모드)</title>
+  <title>ATP Random Question ✈️ 문제풀기 (최종 고정 경로)</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -68,7 +68,9 @@ let answered = false;
 
 // 문제집 로딩
 let script = document.createElement('script');
-script.src = (book === 'flight_theory') ? './problems_flight_theory.js' : './problems.js';
+script.src = (book === 'flight_theory') 
+  ? 'https://henrypark-kr.github.io/atp-quiz/problems_flight_theory.js' 
+  : 'https://henrypark-kr.github.io/atp-quiz/problems.js';
 document.head.appendChild(script);
 
 script.onload = () => {
@@ -91,10 +93,6 @@ script.onload = () => {
   document.getElementById('reset-btn').style.display = 'block';
   nextQuestion();
 };
-
-function startQuiz() {
-  updateScoreboard();
-}
 
 function updateScoreboard() {
   let percentage = totalCount === 0 ? 0 : Math.round((correctCount / totalCount) * 100);
