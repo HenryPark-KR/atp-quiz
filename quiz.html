@@ -27,8 +27,10 @@
     #choices button:hover { background: #007BFF; color: white; }
     #feedback { margin-top: 1rem; font-weight: bold; font-size: 1.2rem; }
     #answer { margin-top: 1rem; display: none; font-size: 1rem; color: #555; white-space: pre-line; }
-    button { margin-top: 1rem; background: #007BFF; color: white; border: none; border-radius: 5px; padding: 0.8rem 2rem; font-size: 1.2rem; display: block; margin-left: auto; margin-right: auto; }
-    #wrong-note-btn { background: #28a745; }
+    button { margin-top: 1rem; padding: 0.8rem 2rem; font-size: 1.2rem; display: block; margin-left: auto; margin-right: auto; border: none; border-radius: 5px; cursor: pointer; }
+    #next-btn { background: #007BFF; color: white; }
+    #wrong-note-btn { background: #28a745; color: white; }
+    #home-btn { background: #6c757d; color: white; }
   </style>
   <script src="./problems.js"></script>
 </head>
@@ -42,6 +44,7 @@
     <div id="answer"></div>
     <button type="button" id="next-btn">다음 문제</button>
     <button type="button" id="wrong-note-btn">오답노트 풀기</button>
+    <button type="button" id="home-btn" onclick="location.href='./index.html'">메인페이지로 돌아가기</button>
   </div>
 
 <script>
@@ -92,8 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('feedback').innerText = '정답입니다! 🎯';
       document.getElementById('feedback').style.color = 'green';
     } else {
-      // 깊은 복사로 오답 저장!!
-      wrongAnswers.push({...problems[current]});
+      wrongAnswers.push({...problems[current]}); // 깊은 복사
       document.getElementById('feedback').innerText = '오답입니다 😢 정답은 (' + correct + ')입니다.';
       document.getElementById('feedback').style.color = 'red';
     }
@@ -108,12 +110,12 @@ document.addEventListener('DOMContentLoaded', function() {
       alert("현재까지 오답이 없습니다! 🎯");
       return;
     }
-    problems = [...wrongAnswers]; // 오답 리스트로 교체
-    wrongAnswers = []; // 초기화
+    problems = [...wrongAnswers];
+    wrongAnswers = [];
     correctCount = 0;
     totalCount = 0;
     updateScoreboard();
-    nextQuestion(); // 무조건 새 문제 로딩
+    nextQuestion();
   }
 
   nextQuestion();
