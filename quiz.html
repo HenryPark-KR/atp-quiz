@@ -81,6 +81,7 @@
     }
     #next-btn { background: #007BFF; color: white; }
     #home-btn { background: #6c757d; color: white; }
+    #reset-btn { background: #dc3545; color: white; }
   </style>
 </head>
 <body>
@@ -93,6 +94,7 @@
     <div id="answer"></div>
     <button type="button" id="next-btn" class="action-btn">다음 문제</button>
     <button type="button" id="home-btn" class="action-btn" onclick="location.href='./index.html'">메인페이지로 돌아가기</button>
+    <button type="button" id="reset-btn" class="action-btn" onclick="resetWrongNotes()">오답노트 초기화</button>
   </div>
 
 <script>
@@ -180,6 +182,12 @@ function checkAnswer(selected) {
   document.getElementById('answer').style.display = 'block';
   problems.splice(current, 1);
   updateScoreboard();
+}
+
+function resetWrongNotes() {
+  localStorage.removeItem('wrongNotes');
+  alert('오답노트가 초기화되었습니다!');
+  location.reload();
 }
 
 document.getElementById('next-btn').addEventListener('click', nextQuestion);
