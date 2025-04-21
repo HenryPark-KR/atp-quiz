@@ -26,7 +26,7 @@
     <div id="choices"></div>
     <div id="feedback"></div>
     <div id="answer"></div>
-    <button class="next-btn" onclick="nextQuestion()">다음 문제</button>
+    <button class="next-btn" id="next-btn">다음 문제</button>
   </div>
 
 <script>
@@ -62,11 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('answer').style.display = 'block';
   }
 
-  // 페이지 로드 시 바로 문제 표시
+  // 처음 문제 표시
   nextQuestion();
 
-  // "다음 문제" 버튼에서도 호출할 수 있게 등록
-  window.nextQuestion = nextQuestion;
+  // "다음 문제" 버튼에 이벤트 리스너 연결
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.addEventListener('click', nextQuestion);
 });
 </script>
 
