@@ -4,119 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP random Question</title>
+  <title>ATP Random Question 메인페이지</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 1rem; background: #f9f9f9; }
-    .card { border: 1px solid #ccc; padding: 1.5rem; border-radius: 10px; background: white; max-width: 90%; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: left; }
-    h1 { font-size: 1.6rem; text-align: center; margin-bottom: 1rem; }
-    #scoreboard { font-size: 1rem; margin-bottom: 1rem; text-align: center; color: #333; }
-    #question { font-size: 1.2rem; margin-bottom: 1rem; }
-    #choices { display: flex; flex-direction: column; align-items: flex-start; }
-    #choices button { margin: 0.4rem 0; padding: 0.7rem 1rem; font-size: 1.1rem; width: 100%; text-align: left; border: 1px solid #007BFF; border-radius: 5px; background: #fff; }
-    #choices button:hover { background: #007BFF; color: white; }
-    #feedback { margin-top: 1rem; font-weight: bold; font-size: 1.2rem; }
-    #answer { margin-top: 1rem; display: none; font-size: 1rem; color: #555; white-space: pre-line; }
-    button { margin-top: 1rem; background: #007BFF; color: white; border: none; border-radius: 5px; padding: 0.8rem 2rem; font-size: 1.2rem; display: block; margin-left: auto; margin-right: auto; }
-    #wrong-note-btn { display: none; background: #28a745; }
+    body { font-family: Arial, sans-serif; background: #f0f4f8; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+    .container { text-align: center; }
+    h1 { font-size: 2rem; color: #333; margin-bottom: 2rem; }
+    button { margin: 1rem; padding: 1rem 2rem; font-size: 1.2rem; border: none; border-radius: 8px; cursor: pointer; }
+    .start-btn { background-color: #007BFF; color: white; }
+    .wrongnote-btn { background-color: #28a745; color: white; }
   </style>
-  <script src="./problems.js"></script>
 </head>
 <body>
-  <div class="card">
-    <h1>ATP random Question</h1>
-    <div id="scoreboard">현재까지 0문제 풀었고, 0문제 맞췄습니다. (정답률 0%)</div>
-    <div id="question">로딩 중...</div>
-    <div id="choices"></div>
-    <div id="feedback"></div>
-    <div id="answer"></div>
-    <button type="button" id="next-btn">다음 문제</button>
-    <button type="button" id="wrong-note-btn">오답노트 풀기</button>
+  <div class="container">
+    <h1>ATP Random Question</h1>
+    <button class="start-btn" onclick="location.href='quiz.html'">문제 풀기 시작</button><br>
+    <button class="wrongnote-btn" onclick="location.href='wrongnote.html'">오답노트 풀기</button>
   </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  let current = 0;
-  let correctCount = 0;
-  let totalCount = 0;
-  let answered = false;
-  let wrongAnswers = [];
-  let originalProblems = [...problems]; // 처음 전체 문제 백업
-
-  function updateScoreboard() {
-    let percentage = totalCount === 0 ? 0 : Math.round((correctCount / totalCount) * 100);
-    document.getElementById('scoreboard').innerText = 
-      `현재까지 ${totalCount}문제 풀었고, ${correctCount}문제 맞췄습니다. (정답률 ${percentage}%)`;
-  }
-
-  function nextQuestion() {
-    if (problems.length === 0) {
-      document.getElementById('question').innerText = "모든 문제를 다 풀었습니다! 🎯";
-      document.getElementById('choices').innerHTML = '';
-      document.getElementById('next-btn').style.display = 'none';
-      if (wrongAnswers.length > 0) {
-        document.getElementById('wrong-note-btn').style.display = 'block';
-      }
-      return;
-    }
-    const randomIndex = Math.floor(Math.random() * problems.length);
-    current = randomIndex;
-    answered = false;
-    document.getElementById('question').innerText = problems[randomIndex].question;
-    const choicesDiv = document.getElementById('choices');
-    choicesDiv.innerHTML = '';
-    problems[randomIndex].choices.forEach(choice => {
-      const btn = document.createElement('button');
-      btn.textContent = choice;
-      btn.onclick = () => checkAnswer(choice.charAt(0));
-      choicesDiv.appendChild(btn);
-    });
-    document.getElementById('feedback').innerText = '';
-    document.getElementById('answer').style.display = 'none';
-  }
-
-  function checkAnswer(selected) {
-    if (answered) return;
-    answered = true;
-    totalCount += 1;
-    const correct = problems[current].correct;
-    if (selected === correct) {
-      correctCount += 1;
-      document.getElementById('feedback').innerText = '정답입니다! 🎯';
-      document.getElementById('feedback').style.color = 'green';
-    } else {
-      wrongAnswers.push(problems[current]);
-      document.getElementById('feedback').innerText = '오답입니다 😢 정답은 (' + correct + ')입니다.';
-      document.getElementById('feedback').style.color = 'red';
-    }
-    document.getElementById('answer').innerText = problems[current].explanation;
-    document.getElementById('answer').style.display = 'block';
-    problems.splice(current, 1); // 현재 문제 제거
-    updateScoreboard();
-  }
-
-  function startWrongNote() {
-    if (wrongAnswers.length === 0) {
-      alert("오답이 없습니다! 🎯");
-      return;
-    }
-    problems = [...wrongAnswers]; // 오답 문제로 덮기
-    wrongAnswers = [];
-    correctCount = 0;
-    totalCount = 0;
-    updateScoreboard();
-    document.getElementById('wrong-note-btn').style.display = 'none';
-    document.getElementById('next-btn').style.display = 'block';
-    nextQuestion();
-  }
-
-  // 처음 문제 표시
-  nextQuestion();
-  updateScoreboard();
-
-  document.getElementById('next-btn').addEventListener('click', nextQuestion);
-  document.getElementById('wrong-note-btn').addEventListener('click', startWrongNote);
-});
-</script>
-
 </body>
 </html>
