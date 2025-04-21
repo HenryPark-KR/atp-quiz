@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question ✈️ 문제풀기 (최종 고정 경로 + 충돌수정)</title>
+  <title>ATP Random Question ✈️ 문제풀기 (PERFECT)</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -58,6 +58,7 @@ const book = params.get('book') || 'atp';
 const mode = params.get('mode') || 'normal';
 
 let allProblems = [];
+let problems = [];
 let wrongNotes = JSON.parse(localStorage.getItem('wrongNotes') || '[]');
 
 let current = 0;
@@ -81,7 +82,11 @@ script.onload = () => {
     problems = wrongNotes.length > 0 ? wrongNotes : [];
   }
   if (!problems || problems.length === 0) {
-    document.getElementById('question').innerText = "문제가 없습니다.";
+    document.getElementById('scoreboard').innerText = "🎉 모든 문제를 다 풀었습니다!";
+    document.getElementById('question').innerText = "더 이상 남은 문제가 없습니다.";
+    document.getElementById('choices').innerHTML = '';
+    document.getElementById('feedback').innerText = '';
+    document.getElementById('answer').style.display = 'none';
     document.getElementById('next-btn').style.display = 'none';
     document.getElementById('home-btn').style.display = 'block';
     document.getElementById('reset-btn').style.display = 'block';
@@ -101,8 +106,11 @@ function updateScoreboard() {
 
 function nextQuestion() {
   if (!problems || problems.length === 0) {
-    document.getElementById('question').innerText = "모든 문제를 다 풀었습니다! 🎯";
+    document.getElementById('scoreboard').innerText = "🎉 모든 문제를 다 풀었습니다!";
+    document.getElementById('question').innerText = "더 이상 남은 문제가 없습니다.";
     document.getElementById('choices').innerHTML = '';
+    document.getElementById('feedback').innerText = '';
+    document.getElementById('answer').style.display = 'none';
     document.getElementById('next-btn').style.display = 'none';
     return;
   }
