@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question ✈️ 문제풀기 (ULTIMATE)</title>
+  <title>ATP Random Question ✈️ 문제풀기 (ULTIMATE + HomeButton)</title>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
   <style>
     body {
@@ -108,7 +108,7 @@
   </div>
 
 <script>
-let problems = []; // 🔥🔥🔥 초기화 추가!! (진짜 핵심)
+let problems = [];
 const params = new URLSearchParams(window.location.search);
 const book = params.get('book') || 'atp';
 const mode = params.get('mode') || 'normal';
@@ -199,6 +199,7 @@ function finishQuiz() {
   document.getElementById('feedback').innerText = '';
   document.getElementById('answer').style.display = 'none';
   document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('home-btn').style.display = 'block'; // 🔥 메인페이지 버튼 표시 추가
 }
 function resetWrongNotes() {
   localStorage.removeItem('wrongNotes');
