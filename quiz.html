@@ -8,7 +8,8 @@
   <style>
     body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 1rem; }
     .card { border: 1px solid #ccc; padding: 1.5rem; border-radius: 10px; background: white; max-width: 90%; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: left; }
-    h1 { font-size: 1.6rem; text-align: center; margin-bottom: 1rem; }
+    h1 { font-size: 1.6rem; text-align: center; margin-bottom: 0.5rem; }
+    #mode { font-size: 1rem; text-align: center; color: #28a745; margin-bottom: 1rem; }
     #scoreboard { font-size: 1rem; margin-bottom: 1rem; text-align: center; color: #333; }
     #question { font-size: 1.2rem; margin-bottom: 1rem; }
     #choices { display: flex; flex-direction: column; align-items: flex-start; }
@@ -37,6 +38,7 @@
 <body>
   <div class="card">
     <h1>ATP Random Question - 문제풀기</h1>
+    <div id="mode"></div>
     <div id="scoreboard">현재까지 0문제 풀었고, 0문제 맞췄습니다. (정답률 0%)</div>
     <div id="question">로딩 중...</div>
     <div id="choices"></div>
@@ -55,11 +57,16 @@ document.addEventListener('DOMContentLoaded', function() {
   let answered = false;
   let wrongAnswers = [];
   let originalProblems = [...problems];
+  let isWrongNoteMode = false;
 
   function updateScoreboard() {
     let percentage = totalCount === 0 ? 0 : Math.round((correctCount / totalCount) * 100);
     document.getElementById('scoreboard').innerText = 
       `현재까지 ${totalCount}문제 풀었고, ${correctCount}문제 맞췄습니다. (정답률 ${percentage}%)`;
+  }
+
+  function updateMode() {
+    document.getElementById('mode').innerText = isWrongNoteMode ? "[오답노트 모드]" : "";
   }
 
   function nextQuestion() {
@@ -114,11 +121,14 @@ document.addEventListener('DOMContentLoaded', function() {
     wrongAnswers = [];
     correctCount = 0;
     totalCount = 0;
+    isWrongNoteMode = true;
+    updateMode();
     updateScoreboard();
     nextQuestion();
   }
 
   nextQuestion();
+  updateMode();
   updateScoreboard();
 
   document.getElementById('next-btn').addEventListener('click', nextQuestion);
