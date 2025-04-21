@@ -107,15 +107,14 @@ document.addEventListener('DOMContentLoaded', function() {
       alert("현재까지 오답이 없습니다! 🎯");
       return;
     }
-    problems = [...wrongAnswers]; // 오답 리스트로 교체!!!
+    problems = [...wrongAnswers]; // 오답 리스트로 교체
     wrongAnswers = []; // 초기화
     correctCount = 0;
     totalCount = 0;
     updateScoreboard();
-    nextQuestion();
+    nextQuestion(); // 무조건 새 문제 로딩
   }
 
-  // 처음 문제 표시
   nextQuestion();
   updateScoreboard();
 
