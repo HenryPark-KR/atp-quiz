@@ -35,7 +35,7 @@
     }
     .btn {
       display: inline-block;
-      margin: 1rem;
+      margin: 0.5rem;
       padding: 1rem 2rem;
       font-size: 1.2rem;
       color: white;
@@ -46,18 +46,12 @@
       width: 250px;
       text-align: center;
     }
-    .atp-btn {
-      background-color: #007BFF;
-    }
-    .atp-btn:hover {
-      background-color: #0056b3;
-    }
-    .flight-btn {
-      background-color: #28a745;
-    }
-    .flight-btn:hover {
-      background-color: #1e7e34;
-    }
+    .atp-btn { background-color: #007BFF; }
+    .atp-btn:hover { background-color: #0056b3; }
+    .flight-btn { background-color: #28a745; }
+    .flight-btn:hover { background-color: #1e7e34; }
+    .wrongnote-btn { background-color: #dc3545; }
+    .wrongnote-btn:hover { background-color: #bd2130; }
   </style>
 </head>
 <body>
@@ -66,7 +60,9 @@
   <h2>문제집을 선택하세요!</h2>
 
   <a href="./quiz.html?mode=normal&book=atp" class="btn atp-btn">ATP 문제집 풀기</a>
+  <a href="./quiz.html?mode=wrongnote&book=atp" class="btn wrongnote-btn">ATP 오답노트 풀기</a>
   <a href="./quiz.html?mode=normal&book=flight_theory" class="btn flight-btn">비행이론 문제집 풀기</a>
+  <a href="./quiz.html?mode=wrongnote&book=flight_theory" class="btn wrongnote-btn">비행이론 오답노트 풀기</a>
 
 </body>
 </html>
