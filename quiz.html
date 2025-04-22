@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP Random Question ✈️ 문제풀기 (REAL FINAL FIX)</title>
+  <title>ATP Random Question ✈️ 문제풀기 (SUPER FINAL)</title>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -121,6 +121,7 @@ function checkAnswer(selected) {
       localStorage.setItem('wrongNotes', JSON.stringify(wrongNotes));
     }
   }
+
   document.getElementById('answer').innerText = currentProblems[current].explanation || "";
   document.getElementById('answer').style.display = 'block';
   currentProblems.splice(current, 1);
