@@ -95,7 +95,6 @@
 </div>
 
 <script>
-let problems = window.problems;
 let current = 0;
 let correctCount = 0;
 let totalCount = 0;
@@ -103,7 +102,7 @@ let answered = false;
 let wrongProblems = [];
 
 function setupQuiz() {
-  if (!problems || problems.length === 0) {
+  if (!window.problems || window.problems.length === 0) {
     document.getElementById('question').innerText = "현재 문제가 없습니다.";
     return;
   }
@@ -111,14 +110,14 @@ function setupQuiz() {
 }
 
 function showProblem() {
-  if (current >= problems.length) {
+  if (current >= window.problems.length) {
     document.getElementById('question').innerHTML = "🎉 모든 문제를 다 풀었습니다!";
     document.getElementById('choices').innerHTML = "";
     document.getElementById('next-btn').style.display = 'none';
     return;
   }
 
-  const problem = problems[current];
+  const problem = window.problems[current];
   document.getElementById('question').innerText = problem.question;
 
   const choicesDiv = document.getElementById('choices');
@@ -139,8 +138,8 @@ function checkAnswer(selected) {
   answered = true;
   totalCount++;
 
-  const correctChoice = problems[current].choices.find(c => c.startsWith(problems[current].correct));
-  if (selected.startsWith(problems[current].correct)) {
+  const correctChoice = window.problems[current].choices.find(c => c.startsWith(window.problems[current].correct));
+  if (selected.startsWith(window.problems[current].correct)) {
     correctCount++;
     document.getElementById('feedback').innerText = "정답입니다! 🎉";
     document.getElementById('feedback').style.color = 'green';
