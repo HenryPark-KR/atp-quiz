@@ -113,14 +113,14 @@ function setupQuiz() {
 }
 
 function showProblem() {
-  if (current >= problems.length) {
+  if (current >= window.problems.length) {
     document.getElementById('question').innerHTML = "🎉 오답 문제 다 풀었습니다!";
     document.getElementById('choices').innerHTML = "";
     document.getElementById('next-btn').style.display = 'none';
     return;
   }
 
-  const problem = problems[current];
+  const problem = window.problems[current];
   document.getElementById('question').innerText = problem.question.trim();
 
   const choicesDiv = document.getElementById('choices');
@@ -141,13 +141,13 @@ function checkAnswer(selected) {
   answered = true;
   totalCount++;
 
-  const correctChoice = problems[current].choices.find(c => c.startsWith(problems[current].correct));
-  if (selected.startsWith(problems[current].correct)) {
+  const correctChoice = window.problems[current].choices.find(c => c.startsWith(window.problems[current].correct));
+  if (selected.startsWith(window.problems[current].correct)) {
     correctCount++;
     document.getElementById('feedback').innerText = "정답입니다! 🎉";
     document.getElementById('feedback').style.color = 'green';
   } else {
-    wrongProblems.push(problems[current]);
+    wrongProblems.push(window.problems[current]);
     document.getElementById('feedback').innerText = `오답입니다 😞 정답은: ${correctChoice}`;
     document.getElementById('feedback').style.color = 'red';
   }
