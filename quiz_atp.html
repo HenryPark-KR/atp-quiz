@@ -1,187 +1,92 @@
-
+<!-- quiz_atp.html -->
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>✈️ ATP 문제 풀기</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Pretendard', sans-serif;
-      background: linear-gradient(to bottom, #aee1f9, #f0f8ff);
-      margin: 0;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .card {
-      background: white;
-      margin-top: 100px;
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      width: 100%;
-      max-width: 600px;
-      text-align: center;
-    }
-    .action-btn {
-      margin-top: 1rem;
-      padding: 0.8rem;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 12px;
-      width: 100%;
-      cursor: pointer;
-    }
-    #next-btn { background: #007bff; color: white; }
-    #home-btn { background: #6c757d; color: white; }
-    #reset-btn { background: #dc3545; color: white; }
-  
-#choices button {
-  margin: 0.5rem 0;
-  padding: 1.2rem;
-  font-size: 1.2rem;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  background: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  color: #333;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-#choices button:hover {
-  background: #4a90e2;
-  color: white;
-  transform: scale(1.02);
-}
-
-</style>
+  <title>ATP 문제 풀기</title>
+  <script src="problems.js"></script> <!-- 문제 스크립트 파일 불러오기 -->
+  <link rel="stylesheet" href="style.css"> <!-- 필요한 경우 스타일 -->
 </head>
 <body>
-  <div class="card">
-    <h1>✈️ ATP 문제 풀기</h1>
-    <div id="scoreboard">문제 로딩 중...</div>
-    <div id="question">잠시만 기다려주세요...</div>
+  <div class="quiz-container">
+    <h1>ATP Random Question ✈️</h1>
+    <div id="score"></div>
+    <div id="question">문제 로딩 중...</div>
     <div id="choices"></div>
     <div id="feedback"></div>
-    <div id="answer"></div>
-    <button id="next-btn" class="action-btn" style="display:none;">다음 문제</button>
-    <button id="home-btn" class="action-btn" onclick="location.href='index.html'" style="display:none;">메인페이지로 돌아가기</button>
-    <button id="reset-btn" class="action-btn" onclick="resetWrongNotes()" style="display:none;">오답노트 초기화</button>
+    <div id="answer" style="display: none;"></div>
+    <button id="next-btn" onclick="nextQuestion()">다음 문제</button>
+    <button onclick="location.href='index.html'">메인페이지로 돌아가기</button>
+    <button onclick="location.href='wrongnote_atp.html'">오답노트 풀기</button>
   </div>
 
-<script>
-let problems = [];
-let currentProblems = [];
-let wrongNotes = JSON.parse(localStorage.getItem('wrongNotes_atp') || '[]');
-let current = 0;
-let correctCount = 0;
-let totalCount = 0;
-let answered = false;
+  <script>
+    let problems = window.problems; // 문제 데이터 사용
+    let current = 0;
+    let correctCount = 0;
+    let totalCount = 0;
+    let answered = false;
+    let wrongProblems = [];
 
-fetch('problems.js')
-  .then(response => response.js())
-  .then(data => {
-    problems = data;
+    function setupQuiz() {
+      if (problems.length === 0) {
+        document.getElementById('question').innerText = "현재 문제가 없습니다.";
+        return;
+      }
+      showProblem();
+    }
+
+    function showProblem() {
+      if (current >= problems.length) {
+        document.getElementById('question').innerHTML = "🎉 모든 문제를 다 풀었습니다!";
+        document.getElementById('choices').innerHTML = "";
+        document.getElementById('next-btn').style.display = 'none';
+        return;
+      }
+
+      const problem = problems[current];
+      document.getElementById('question').innerText = problem.question;
+
+      const choicesDiv = document.getElementById('choices');
+      choicesDiv.innerHTML = '';
+      problem.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.innerText = choice;
+        btn.onclick = () => checkAnswer(choice);
+        choicesDiv.appendChild(btn);
+      });
+
+      document.getElementById('feedback').innerText = '';
+      document.getElementById('answer').style.display = 'none';
+    }
+
+    function checkAnswer(selected) {
+      if (answered) return;
+      answered = true;
+      totalCount++;
+
+      const correctChoice = problems[current].choices.find(c => c.startsWith(problems[current].correct));
+      if (selected.startsWith(problems[current].correct)) {
+        correctCount++;
+        document.getElementById('feedback').innerText = "정답입니다! 🎉";
+        document.getElementById('feedback').style.color = 'green';
+      } else {
+        wrongProblems.push(problems[current]);
+        document.getElementById('feedback').innerText = `오답입니다 🤭 \n정답은: ${correctChoice}`;
+        document.getElementById('feedback').style.color = 'red';
+      }
+      document.getElementById('answer').innerText = problems[current].explanation;
+      document.getElementById('answer').style.display = 'block';
+    }
+
+    function nextQuestion() {
+      answered = false;
+      current++;
+      showProblem();
+    }
+
     setupQuiz();
-  })
-  .catch(error => {
-    document.getElementById('question').innerText = "문제 데이터를 불러올 수 없습니다.";
-    document.getElementById('choices').innerHTML = '';
-    document.getElementById('feedback').innerText = '관리자에게 문의하세요.';
-    document.getElementById('next-btn').style.display = 'none';
-  });
-
-function extractCorrectAnswer(problem) {
-  if (!problem.correct) return '';
-  const match = problem.correct.match(/([A-D])/i);
-  return match ? match[1].toUpperCase() : '';
-}
-
-function getSelectedAnswer(selectedText) {
-  return selectedText.trim().charAt(0).toUpperCase();
-}
-
-function setupQuiz() {
-  currentProblems = [...problems];
-  document.getElementById('next-btn').style.display = 'block';
-  document.getElementById('home-btn').style.display = 'block';
-  document.getElementById('reset-btn').style.display = 'block';
-  nextQuestion();
-}
-
-function updateScoreboard() {
-  let percentage = totalCount === 0 ? 0 : Math.round((correctCount / totalCount) * 100);
-  document.getElementById('scoreboard').innerText = `현재까지 ${totalCount}문제 중 ${correctCount}개 정답 (정답률 ${percentage}%)`;
-}
-
-function nextQuestion() {
-  if (!currentProblems.length) {
-    finishQuiz();
-    return;
-  }
-  const randomIndex = Math.floor(Math.random() * currentProblems.length);
-  current = randomIndex;
-  answered = false;
-  document.getElementById('question').innerText = currentProblems[randomIndex].question;
-  const choicesDiv = document.getElementById('choices');
-  choicesDiv.innerHTML = '';
-  currentProblems[randomIndex].choices.forEach(choice => {
-    const btn = document.createElement('button');
-    btn.textContent = choice;
-    btn.onclick = () => checkAnswer(choice);
-    choicesDiv.appendChild(btn);
-  });
-  document.getElementById('feedback').innerText = '';
-  document.getElementById('answer').style.display = 'none';
-}
-
-function checkAnswer(selected) {
-  if (answered) return;
-  answered = true;
-  totalCount += 1;
-
-  const correct = extractCorrectAnswer(currentProblems[current]);
-  const selectedValue = getSelectedAnswer(selected);
-
-  if (selectedValue === correct) {
-    correctCount += 1;
-    document.getElementById('feedback').innerText = '정답입니다! 🎯';
-    document.getElementById('feedback').style.color = 'green';
-  } else {
-    document.getElementById('feedback').innerText = `오답입니다 😢 정답은 (${correct})입니다.`;
-    document.getElementById('feedback').style.color = 'red';
-    wrongNotes.push(currentProblems[current]);
-    localStorage.setItem('wrongNotes_atp', JSON.stringify(wrongNotes));
-  }
-
-  document.getElementById('answer').innerText = currentProblems[current].explanation || "";
-  document.getElementById('answer').style.display = 'block';
-  currentProblems.splice(current, 1);
-  updateScoreboard();
-}
-
-function finishQuiz() {
-  document.getElementById('scoreboard').innerText = "🎉 모든 문제를 다 풀었습니다!";
-  document.getElementById('question').innerText = "남은 문제가 없습니다.";
-  document.getElementById('choices').innerHTML = '';
-  document.getElementById('feedback').innerText = '';
-  document.getElementById('answer').style.display = 'none';
-  document.getElementById('next-btn').style.display = 'none';
-}
-
-function resetWrongNotes() {
-  localStorage.removeItem('wrongNotes_atp');
-  alert('오답노트를 초기화했습니다!');
-  location.href = 'index.html';
-}
-
-document.getElementById('next-btn').addEventListener('click', nextQuestion);
-</script>
-
+  </script>
 </body>
 </html>
