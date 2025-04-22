@@ -1,147 +1,135 @@
-
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📚 비행이론 문제 풀기</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+  <title>Flight Theory Random Question ✈️</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="problems_flight_theory.js"></script>
   <style>
     body {
-      font-family: 'Pretendard', sans-serif;
-      background: linear-gradient(to bottom, #aee1f9, #f0f8ff);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(to right, #e8f0fe, #ffffff);
       margin: 0;
-      padding: 1rem;
+      padding: 0;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
-    .card {
+    .quiz-container {
       background: white;
-      margin-top: 100px;
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      width: 100%;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      width: 90%;
       max-width: 600px;
       text-align: center;
     }
-    .action-btn {
-      margin-top: 1rem;
-      padding: 0.8rem;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 12px;
+    h1 {
+      margin-bottom: 20px;
+      color: #003366;
+    }
+    #question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    #choices button {
+      display: block;
       width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #3366cc;
+      background-color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    #choices button:hover {
+      background-color: #3366cc;
+      color: white;
+    }
+    #feedback {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    #answer {
+      margin-top: 15px;
+      font-size: 15px;
+      color: #555;
+    }
+    .nav-buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .nav-buttons button {
+      background-color: #003366;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
       cursor: pointer;
     }
-    #next-btn { background: #007bff; color: white; }
-    #home-btn { background: #6c757d; color: white; }
-    #reset-btn { background: #dc3545; color: white; }
-  
-#choices button {
-  margin: 0.5rem 0;
-  padding: 1.2rem;
-  font-size: 1.2rem;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  background: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  color: #333;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-#choices button:hover {
-  background: #4a90e2;
-  color: white;
-  transform: scale(1.02);
-}
-
-</style>
+    .nav-buttons button:hover {
+      background-color: #001a33;
+    }
+  </style>
 </head>
 <body>
-  <div class="card">
-    <h1>📚 비행이론 문제 풀기</h1>
-    <div id="scoreboard">문제 로딩 중...</div>
-    <div id="question">잠시만 기다려주세요...</div>
-    <div id="choices"></div>
-    <div id="feedback"></div>
-    <div id="answer"></div>
-    <button id="next-btn" class="action-btn" style="display:none;">다음 문제</button>
-    <button id="home-btn" class="action-btn" onclick="location.href='index.html'" style="display:none;">메인페이지로 돌아가기</button>
-    <button id="reset-btn" class="action-btn" onclick="resetWrongNotes()" style="display:none;">오답노트 초기화</button>
+<div class="quiz-container">
+  <h1>Flight Theory Random Question ✈️</h1>
+  <div id="score"></div>
+  <div id="question">문제 로딩 중...</div>
+  <div id="choices"></div>
+  <div id="feedback"></div>
+  <div id="answer" style="display:none;"></div>
+  <button id="next-btn" onclick="nextQuestion()" style="margin-top: 20px;">다음 문제</button>
+  <div class="nav-buttons">
+    <button onclick="location.href='index.html'">메인 페이지</button>
+    <button onclick="location.href='wrongnote_flight.html'">오답노트 풀기</button>
   </div>
+</div>
 
 <script>
-let problems = [];
-let currentProblems = [];
-let wrongNotes = JSON.parse(localStorage.getItem('wrongNotes_flight') || '[]');
+let problems = window.problems;
 let current = 0;
 let correctCount = 0;
 let totalCount = 0;
 let answered = false;
-
-fetch('problems_flight_theory.js')
-  .then(response => response.json())
-  .then(data => {
-    problems = data;
-    setupQuiz();
-  })
-  .catch(error => {
-    document.getElementById('question').innerText = "문제 데이터를 불러올 수 없습니다.";
-    document.getElementById('choices').innerHTML = '';
-    document.getElementById('feedback').innerText = '관리자에게 문의하세요.';
-    document.getElementById('next-btn').style.display = 'none';
-  });
-
-function extractCorrectAnswer(problem) {
-  if (!problem.correct) return '';
-  const match = problem.correct.match(/[1-4]/);
-  return match ? match[0] : '';
-}
-
-function getSelectedAnswer(selectedText) {
-  switch (selectedText.trim().charAt(0)) {
-    case '①': return '1';
-    case '②': return '2';
-    case '③': return '3';
-    case '④': return '4';
-    default: return '';
-  }
-}
+let wrongProblems = [];
 
 function setupQuiz() {
-  currentProblems = [...problems];
-  document.getElementById('next-btn').style.display = 'block';
-  document.getElementById('home-btn').style.display = 'block';
-  document.getElementById('reset-btn').style.display = 'block';
-  nextQuestion();
-}
-
-function updateScoreboard() {
-  let percentage = totalCount === 0 ? 0 : Math.round((correctCount / totalCount) * 100);
-  document.getElementById('scoreboard').innerText = `현재까지 ${totalCount}문제 중 ${correctCount}개 정답 (정답률 ${percentage}%)`;
-}
-
-function nextQuestion() {
-  if (!currentProblems.length) {
-    finishQuiz();
+  if (!problems || problems.length === 0) {
+    document.getElementById('question').innerText = "현재 문제가 없습니다.";
     return;
   }
-  const randomIndex = Math.floor(Math.random() * currentProblems.length);
-  current = randomIndex;
-  answered = false;
-  document.getElementById('question').innerText = currentProblems[randomIndex].question;
+  showProblem();
+}
+
+function showProblem() {
+  if (current >= problems.length) {
+    document.getElementById('question').innerHTML = "🎉 모든 문제를 다 풀었습니다!";
+    document.getElementById('choices').innerHTML = "";
+    document.getElementById('next-btn').style.display = 'none';
+    return;
+  }
+
+  const problem = problems[current];
+  document.getElementById('question').innerText = problem.question;
+
   const choicesDiv = document.getElementById('choices');
   choicesDiv.innerHTML = '';
-  currentProblems[randomIndex].choices.forEach(choice => {
+  problem.choices.forEach(choice => {
     const btn = document.createElement('button');
-    btn.textContent = choice;
+    btn.innerText = choice;
     btn.onclick = () => checkAnswer(choice);
     choicesDiv.appendChild(btn);
   });
+
   document.getElementById('feedback').innerText = '';
   document.getElementById('answer').style.display = 'none';
 }
@@ -149,45 +137,29 @@ function nextQuestion() {
 function checkAnswer(selected) {
   if (answered) return;
   answered = true;
-  totalCount += 1;
+  totalCount++;
 
-  const correct = extractCorrectAnswer(currentProblems[current]);
-  const selectedValue = getSelectedAnswer(selected);
-
-  if (selectedValue === correct) {
-    correctCount += 1;
-    document.getElementById('feedback').innerText = '정답입니다! 🎯';
+  const correctNumber = problems[current].correct;
+  if (selected.startsWith(correctNumber)) {
+    correctCount++;
+    document.getElementById('feedback').innerText = "정답입니다! 🎉";
     document.getElementById('feedback').style.color = 'green';
   } else {
-    document.getElementById('feedback').innerText = `오답입니다 😢 정답은 (${correct})입니다.`;
+    wrongProblems.push(problems[current]);
+    document.getElementById('feedback').innerText = `오답입니다 😓 정답은: ${correctNumber}`;
     document.getElementById('feedback').style.color = 'red';
-    wrongNotes.push(currentProblems[current]);
-    localStorage.setItem('wrongNotes_flight', JSON.stringify(wrongNotes));
   }
-
-  document.getElementById('answer').innerText = currentProblems[current].explanation || "";
+  document.getElementById('answer').innerText = problems[current].explanation || '';
   document.getElementById('answer').style.display = 'block';
-  currentProblems.splice(current, 1);
-  updateScoreboard();
 }
 
-function finishQuiz() {
-  document.getElementById('scoreboard').innerText = "🎉 모든 문제를 다 풀었습니다!";
-  document.getElementById('question').innerText = "남은 문제가 없습니다.";
-  document.getElementById('choices').innerHTML = '';
-  document.getElementById('feedback').innerText = '';
-  document.getElementById('answer').style.display = 'none';
-  document.getElementById('next-btn').style.display = 'none';
+function nextQuestion() {
+  answered = false;
+  current++;
+  showProblem();
 }
 
-function resetWrongNotes() {
-  localStorage.removeItem('wrongNotes_flight');
-  alert('오답노트를 초기화했습니다!');
-  location.href = 'index.html';
-}
-
-document.getElementById('next-btn').addEventListener('click', nextQuestion);
+setupQuiz();
 </script>
-
 </body>
 </html>
