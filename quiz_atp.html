@@ -84,7 +84,7 @@ let totalCount = 0;
 let answered = false;
 
 fetch('problems.js')
-  .then(response => response.json())
+  .then(response => response.js())
   .then(data => {
     problems = data;
     setupQuiz();
