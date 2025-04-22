@@ -83,7 +83,7 @@ let correctCount = 0;
 let totalCount = 0;
 let answered = false;
 
-fetch('problems_flight_theory.json')
+fetch('problems_flight_theory.js')
   .then(response => response.json())
   .then(data => {
     problems = data;
@@ -98,7 +98,7 @@ fetch('problems_flight_theory.json')
 
 function extractCorrectAnswer(problem) {
   if (!problem.correct) return '';
-  const match = problem.correct.match(/\d/);
+  const match = problem.correct.match(/[1-4]/);
   return match ? match[0] : '';
 }
 

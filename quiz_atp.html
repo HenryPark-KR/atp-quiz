@@ -83,7 +83,7 @@ let correctCount = 0;
 let totalCount = 0;
 let answered = false;
 
-fetch('problems.json')
+fetch('problems.js')
   .then(response => response.json())
   .then(data => {
     problems = data;
@@ -98,7 +98,7 @@ fetch('problems.json')
 
 function extractCorrectAnswer(problem) {
   if (!problem.correct) return '';
-  const match = problem.correct.match(/\(([A-D])\)/i);
+  const match = problem.correct.match(/([A-D])/i);
   return match ? match[1].toUpperCase() : '';
 }
 
