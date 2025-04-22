@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ATP Random Question ✈️</title>
   <link rel="stylesheet" href="style.css">
-  <script src="problems.js"defer></script>
+  <script src="problems.js" defer></script>
   <style>
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -33,6 +33,7 @@
     #question {
       font-size: 20px;
       margin-bottom: 20px;
+      white-space: pre-line;
     }
     #choices button {
       display: block;
@@ -59,6 +60,7 @@
       margin-top: 15px;
       font-size: 15px;
       color: #555;
+      white-space: pre-line;
     }
     .nav-buttons {
       margin-top: 30px;
@@ -95,6 +97,7 @@
 </div>
 
 <script>
+let problems = window.problems;
 let current = 0;
 let correctCount = 0;
 let totalCount = 0;
@@ -102,7 +105,7 @@ let answered = false;
 let wrongProblems = [];
 
 function setupQuiz() {
-  if (!window.problems || window.problems.length === 0) {
+  if (!problems || problems.length === 0) {
     document.getElementById('question').innerText = "현재 문제가 없습니다.";
     return;
   }
@@ -110,22 +113,22 @@ function setupQuiz() {
 }
 
 function showProblem() {
-  if (current >= window.problems.length) {
-    document.getElementById('question').innerHTML = "🎉 모든 문제를 다 풀었습니다!";
+  if (current >= problems.length) {
+    document.getElementById('question').innerHTML = "🎉 오답 문제 다 풀었습니다!";
     document.getElementById('choices').innerHTML = "";
     document.getElementById('next-btn').style.display = 'none';
     return;
   }
 
-  const problem = window.problems[current];
-  document.getElementById('question').innerText = problem.question;
+  const problem = problems[current];
+  document.getElementById('question').innerText = problem.question.trim();
 
   const choicesDiv = document.getElementById('choices');
   choicesDiv.innerHTML = '';
   problem.choices.forEach(choice => {
     const btn = document.createElement('button');
-    btn.innerText = choice;
-    btn.onclick = () => checkAnswer(choice);
+    btn.innerText = choice.trim();
+    btn.onclick = () => checkAnswer(choice.trim());
     choicesDiv.appendChild(btn);
   });
 
@@ -138,16 +141,17 @@ function checkAnswer(selected) {
   answered = true;
   totalCount++;
 
-  const correctChoice = window.problems[current].choices.find(c => c.startsWith(window.problems[current].correct));
-  if (selected.startsWith(window.problems[current].correct)) {
+  const correctChoice = problems[current].choices.find(c => c.startsWith(problems[current].correct));
+  if (selected.startsWith(problems[current].correct)) {
     correctCount++;
     document.getElementById('feedback').innerText = "정답입니다! 🎉";
     document.getElementById('feedback').style.color = 'green';
   } else {
     wrongProblems.push(problems[current]);
-    document.getElementById('feedback').innerText = `오답입니다 😓\n정답은: ${correctChoice}`;
+    document.getElementById('feedback').innerText = `오답입니다 😞 정답은: ${correctChoice}`;
     document.getElementById('feedback').style.color = 'red';
   }
+
   document.getElementById('answer').innerText = problems[current].explanation;
   document.getElementById('answer').style.display = 'block';
 }
