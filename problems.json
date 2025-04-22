@@ -1,0 +1,13 @@
+
+[
+  {
+    "question": "What is the purpose of MOAs?",
+    "choices": [
+      "A. To protect military aircraft operations from civil aircraft.",
+      "B. To separate military training activities from IFR traffic.",
+      "C. To separate military training activities from both IFR and VFR traffic."
+    ],
+    "correct": "(C)",
+    "explanation": "MOAs are designed to separate military training from both IFR and VFR traffic."
+  }
+]
