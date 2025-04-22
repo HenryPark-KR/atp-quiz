@@ -3,89 +3,163 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATP 문제 풀기</title>
-  <script src="problems.js"></script>
+  <title>ATP Random Question ✈️</title>
   <link rel="stylesheet" href="style.css">
+  <script src="problems.js"></script>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(to right, #dbe9f4, #f5f7fa);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .quiz-container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #005f99;
+    }
+    #question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    #choices button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #007acc;
+      background-color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    #choices button:hover {
+      background-color: #007acc;
+      color: white;
+    }
+    #feedback {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    #answer {
+      margin-top: 15px;
+      font-size: 15px;
+      color: #555;
+    }
+    .nav-buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .nav-buttons button {
+      background-color: #005f99;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .nav-buttons button:hover {
+      background-color: #003f66;
+    }
+  </style>
 </head>
 <body>
-  <div class="quiz-container">
-    <h1>ATP Random Question ✈️</h1>
-    <div id="score"></div>
-    <div id="question">문제 로딩 중...</div>
-    <div id="choices"></div>
-    <div id="feedback"></div>
-    <div id="answer" style="display: none;"></div>
-    <button id="next-btn" onclick="nextQuestion()">다음 문제</button>
-    <button onclick="location.href='index.html'">메인페이지로 돌아가기</button>
+<div class="quiz-container">
+  <h1>ATP Random Question ✈️</h1>
+  <div id="score"></div>
+  <div id="question">문제 로딩 중...</div>
+  <div id="choices"></div>
+  <div id="feedback"></div>
+  <div id="answer" style="display:none;"></div>
+  <button id="next-btn" onclick="nextQuestion()" style="margin-top: 20px;">다음 문제</button>
+  <div class="nav-buttons">
+    <button onclick="location.href='index.html'">메인 페이지</button>
     <button onclick="location.href='wrongnote_atp.html'">오답노트 풀기</button>
   </div>
+</div>
 
-  <script>
-    let problems = window.problems;
-    let current = 0;
-    let correctCount = 0;
-    let totalCount = 0;
-    let answered = false;
-    let wrongProblems = [];
+<script>
+let problems = window.problems;
+let current = 0;
+let correctCount = 0;
+let totalCount = 0;
+let answered = false;
+let wrongProblems = [];
 
-    function setupQuiz() {
-      if (problems.length === 0) {
-        document.getElementById('question').innerText = "현재 문제가 없습니다.";
-        return;
-      }
-      showProblem();
-    }
+function setupQuiz() {
+  if (!problems || problems.length === 0) {
+    document.getElementById('question').innerText = "현재 문제가 없습니다.";
+    return;
+  }
+  showProblem();
+}
 
-    function showProblem() {
-      if (current >= problems.length) {
-        document.getElementById('question').innerHTML = "🎉 모든 문제를 다 풀었습니다!";
-        document.getElementById('choices').innerHTML = "";
-        document.getElementById('next-btn').style.display = 'none';
-        return;
-      }
+function showProblem() {
+  if (current >= problems.length) {
+    document.getElementById('question').innerHTML = "🎉 모든 문제를 다 풀었습니다!";
+    document.getElementById('choices').innerHTML = "";
+    document.getElementById('next-btn').style.display = 'none';
+    return;
+  }
 
-      const problem = problems[current];
-      document.getElementById('question').innerText = problem.question;
+  const problem = problems[current];
+  document.getElementById('question').innerText = problem.question;
 
-      const choicesDiv = document.getElementById('choices');
-      choicesDiv.innerHTML = '';
-      problem.choices.forEach(choice => {
-        const btn = document.createElement('button');
-        btn.innerText = choice;
-        btn.onclick = () => checkAnswer(choice);
-        choicesDiv.appendChild(btn);
-      });
+  const choicesDiv = document.getElementById('choices');
+  choicesDiv.innerHTML = '';
+  problem.choices.forEach(choice => {
+    const btn = document.createElement('button');
+    btn.innerText = choice;
+    btn.onclick = () => checkAnswer(choice);
+    choicesDiv.appendChild(btn);
+  });
 
-      document.getElementById('feedback').innerText = '';
-      document.getElementById('answer').style.display = 'none';
-    }
+  document.getElementById('feedback').innerText = '';
+  document.getElementById('answer').style.display = 'none';
+}
 
-    function checkAnswer(selected) {
-      if (answered) return;
-      answered = true;
-      totalCount++;
+function checkAnswer(selected) {
+  if (answered) return;
+  answered = true;
+  totalCount++;
 
-      const correctChoice = problems[current].choices.find(c => c.startsWith(problems[current].correct));
-      if (selected.startsWith(problems[current].correct)) {
-        correctCount++;
-        document.getElementById('feedback').innerText = "정답입니다! 🎉";
-        document.getElementById('feedback').style.color = 'green';
-      } else {
-        wrongProblems.push(problems[current]);
-        document.getElementById('feedback').innerText = `오답입니다 😓 \n정답은: ${correctChoice}`;
-        document.getElementById('feedback').style.color = 'red';
-      }
-      document.getElementById('answer').innerText = problems[current].explanation;
-      document.getElementById('answer').style.display = 'block';
-    }
+  const correctChoice = problems[current].choices.find(c => c.startsWith(problems[current].correct));
+  if (selected.startsWith(problems[current].correct)) {
+    correctCount++;
+    document.getElementById('feedback').innerText = "정답입니다! 🎉";
+    document.getElementById('feedback').style.color = 'green';
+  } else {
+    wrongProblems.push(problems[current]);
+    document.getElementById('feedback').innerText = `오답입니다 😓\n정답은: ${correctChoice}`;
+    document.getElementById('feedback').style.color = 'red';
+  }
+  document.getElementById('answer').innerText = problems[current].explanation;
+  document.getElementById('answer').style.display = 'block';
+}
 
-    function nextQuestion() {
-      answered = false;
-      current++;
-      showProblem();
-    }
+function nextQuestion() {
+  answered = false;
+  current++;
+  showProblem();
+}
 
-    setupQuiz();
-  </script>
+setupQuiz();
+</script>
 </body>
 </html>
