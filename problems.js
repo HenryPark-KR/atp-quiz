@@ -1,4 +1,4 @@
-const problems = [
+window.problems = [
   {
     "question": "\"Military training routes (MTR) above 1,500 feet are depicted on\",",
     "choices": [
