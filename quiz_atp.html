@@ -1,12 +1,11 @@
-<!-- quiz_atp.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ATP 문제 풀기</title>
-  <script src="problems.js"></script> <!-- 문제 스크립트 파일 불러오기 -->
-  <link rel="stylesheet" href="style.css"> <!-- 필요한 경우 스타일 -->
+  <script src="problems.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="quiz-container">
@@ -22,7 +21,7 @@
   </div>
 
   <script>
-    let problems = window.problems; // 문제 데이터 사용
+    let problems = window.problems;
     let current = 0;
     let correctCount = 0;
     let totalCount = 0;
@@ -73,7 +72,7 @@
         document.getElementById('feedback').style.color = 'green';
       } else {
         wrongProblems.push(problems[current]);
-        document.getElementById('feedback').innerText = `오답입니다 🤭 \n정답은: ${correctChoice}`;
+        document.getElementById('feedback').innerText = `오답입니다 😓 \n정답은: ${correctChoice}`;
         document.getElementById('feedback').style.color = 'red';
       }
       document.getElementById('answer').innerText = problems[current].explanation;
