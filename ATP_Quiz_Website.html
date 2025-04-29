@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATP Problem Solver ✈️</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(to right, #d9e4f5, #f7f9fc); margin: 0; padding: 0; }
+    .container { max-width: 900px; margin: 50px auto; background: #ffffff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #00529B; margin-bottom: 20px; }
+    .question { font-size: 1.3em; margin-bottom: 25px; color: #333; }
+    .choices button { display: block; width: 100%; margin-bottom: 12px; padding: 12px; font-size: 1.1em; border: 2px solid #00529B; background: white; border-radius: 8px; cursor: pointer; }
+    .choices button:hover { background: #e0f0ff; }
+    .correct { background-color: #c8f7c5 !important; }
+    .wrong { background-color: #f7c5c5 !important; }
+    .explanation { margin-top: 20px; background: #eef7ff; padding: 15px; border-radius: 10px; font-size: 0.95em; color: #333; }
+    .navigation { margin-top: 30px; text-align: center; }
+    .navigation button { margin: 5px; padding: 10px 20px; font-size: 1em; background: #00529B; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    .navigation button:hover { background: #003d7a; }
+    .footer { margin-top: 50px; text-align: center; font-size: 0.9em; color: #777; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ATP 문제풀이 ✈️</h1>
+    <div id="question-area" class="question"></div>
+    <div class="choices" id="choices-area"></div>
+    <div class="explanation" id="explanation-area" style="display:none;"></div>
+    <div class="navigation">
+      <button onclick="prevQuestion()">⬅️ 이전</button>
+      <button onclick="nextQuestion()">다음 ➡️</button>
+      <button onclick="retryWrong()">오답 다시풀기</button>
+      <button onclick="resetWrong()">오답 초기화</button>
+    </div>
+    <div class="footer">© 2025 Aviation Training ✈️</div>
+  </div>
+
+  <script>
+    let problems = [];
+    let currentIndex = 0;
+    let wrongAnswers = [];
+    let retryMode = false;
+
+    async function loadProblems() {
+      const res = await fetch('atp_problems_final_with_kr.json');
+      problems = await res.json();
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const area = document.getElementById('question-area');
+      const choicesArea = document.getElementById('choices-area');
+      const explanationArea = document.getElementById('explanation-area');
+      const problemList = retryMode ? wrongAnswers : problems;
+
+      if (currentIndex < 0) currentIndex = 0;
+      if (currentIndex >= problemList.length) currentIndex = problemList.length - 1;
+
+      const problem = problemList[currentIndex];
+      area.innerHTML = `<b>Q${currentIndex + 1}/${problemList.length}</b><br><br>${problem.question}`;
+      choicesArea.innerHTML = '';
+      explanationArea.style.display = 'none';
+      explanationArea.innerHTML = '';
+
+      for (const key of ['A', 'B', 'C']) {
+        const btn = document.createElement('button');
+        btn.textContent = `${key}. ${problem.choices[key]}`;
+        btn.onclick = () => checkAnswer(key);
+        choicesArea.appendChild(btn);
+      }
+    }
+
+    function checkAnswer(selected) {
+      const problemList = retryMode ? wrongAnswers : problems;
+      const problem = problemList[currentIndex];
+      const choicesArea = document.getElementById('choices-area');
+      const explanationArea = document.getElementById('explanation-area');
+
+      [...choicesArea.children].forEach(btn => {
+        if (btn.textContent.startsWith(problem.answer)) {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('wrong');
+        }
+        btn.disabled = true;
+      });
+
+      if (selected !== problem.answer && !wrongAnswers.includes(problem)) {
+        wrongAnswers.push(problem);
+      }
+
+      explanationArea.style.display = 'block';
+      explanationArea.innerHTML = `<b>[EN]</b> ${problem.explanation.en}<br><br><b>[KR]</b> ${problem.explanation.kr}`;
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      showQuestion();
+    }
+
+    function prevQuestion() {
+      currentIndex--;
+      showQuestion();
+    }
+
+    function retryWrong() {
+      if (wrongAnswers.length === 0) {
+        alert('오답이 없습니다!');
+        return;
+      }
+      retryMode = true;
+      currentIndex = 0;
+      showQuestion();
+    }
+
+    function resetWrong() {
+      wrongAnswers = [];
+      retryMode = false;
+      currentIndex = 0;
+      alert('오답 기록이 초기화되었습니다.');
+      showQuestion();
+    }
+
+    window.onload = loadProblems;
+  </script>
+</body>
+</html>
