@@ -2455,7 +2455,7 @@
     }
   },
   {
-    "question": "A jet airplane operating at cruise of .80 Mach with an OAT of -40¡C has a true airspeed of",
+    "question": "A jet airplane operating at cruise of .80 Mach with an OAT of -40°C has a true airspeed of",
     "choices": {
       "A": "479 knots.",
       "B": "452 knots.",
@@ -2463,12 +2463,12 @@
     },
     "answer": "A",
     "explanation": {
-      "en": "Using an E6B flight computer, rotate the right inner wheel cutout until the Mach number index is seen. Line the arrow of the Mach number index with the temperature -40¡C line. Find the 80 on the minute scale on the outer portion of the inner wheel. Above the 80 on the \"miles\" scale is almost 48 (three long marks past 45). Common sense tells us it can't be 48 knots, but can be 480 knots. The closest answer to the FAA's answers is 479 knots TAS. Answer (B) is incorrect. Mach .77 would be about 452 knots TAS with -40¡C. Answer (C) is incorrect. Mach .70 would be about 429 knots TAS with -40¡C.",
+      "en": "Using an E6B flight computer, rotate the right inner wheel cutout until the Mach number index is seen. Line the arrow of the Mach number index with the temperature -40°C line. Find the 80 on the minute scale on the outer portion of the inner wheel. Above the 80 on the \"miles\" scale is almost 48 (three long marks past 45). Common sense tells us it can't be 48 knots, but can be 480 knots. The closest answer to the FAA's answers is 479 knots TAS. Answer (B) is incorrect. Mach .77 would be about 452 knots TAS with -40°C. Answer (C) is incorrect. Mach .70 would be about 429 knots TAS with -40°C.",
       "kr": "E6B 비행 컴퓨터를 사용하여 마하수 인덱스가 보일 때까지 오른쪽 내부 휠 컷아웃을 회전합니다. 마하수 지수의 화살표를 온도 -40°C 선에 맞춥니다. 안쪽 바퀴의 바깥쪽 부분에 있는 분 눈금에서 80을 찾습니다. \"마일\" 척도에서 80 이상은 거의 48입니다(45를 지나 세 개의 긴 표시). 상식적으로 보면 48노트는 될 수 없지만 480노트는 될 수 있습니다. FAA의 답변에 가장 가까운 답변은 479노트 TAS입니다. 답변 (B)가 올바르지 않습니다. 마하 .77은 -40°C에서 약 452노트 TAS입니다. 답변 (C)가 올바르지 않습니다. 마하 .70은 -40°C에서 약 429노트 TAS입니다."
     }
   },
   {
-    "question": "A jet airplane operating at cruise of .82 Mach with an OAT of -44¡C has a true airspeed of",
+    "question": "A jet airplane operating at cruise of .82 Mach with an OAT of -44°C has a true airspeed of",
     "choices": {
       "A": "477 knots.",
       "B": "486 knots.",
@@ -7684,7 +7684,7 @@
     "question": "Clear air turbulence associated with a jet stream is",
     "choices": {
       "A": "similar to that associated with a tropical maritime front.",
-      "B": "most commonly found in temperatures between -40¡ and -50¡",
+      "B": "most commonly found in temperatures between -40°C and -50°C",
       "C": "C. most commonly found in the vicinity of the tropopause."
     },
     "answer": "C",
@@ -7735,14 +7735,14 @@
   {
     "question": "The tropopause is generally found when the free air temperatures are",
     "choices": {
-      "A": "between -55¡ and -65¡C.",
-      "B": "between -40¡ and -55¡",
-      "C": "C. colder than -60¡C."
+      "A": "between -55°C and -65°C.",
+      "B": "between -40°C and -55°C",
+      "C": "colder than -60°C."
     },
     "answer": "A",
     "explanation": {
-      "en": "In a standard atmosphere, the tropopause has a temperature of -56.5¡C and a height of about 36,000 feet above the Earth. While both the temperature and altitude ranges of the tropopause are quite large, this answer choice is the best answer to the question given its inclusion of the standard temperature for the tropopause. Answer (B) is incorrect. In a standard atmosphere, the tropopause has a temperature of -56.5¡C, which is outside of the range defined by this answer choice. Answer (C) is incorrect. In a standard atmosphere, the tropopause has a temperature of -56.5¡C, which is warmer than the temperature defined by this answer choice.",
-      "kr": "표준 대기에서 대류권계면의 온도는 -56.5℃이고 높이는 지구에서 약 36,000피트입니다. 대류권계면의 온도와 고도 범위는 모두 상당히 크지만, 이 답변 선택은 대류권계면의 표준 온도를 포함한다는 점을 고려하면 질문에 대한 최선의 답변입니다. 답 (B)가 틀렸습니다. 표준 대기에서 대류권계면의 온도는 -56.5°C이며 이는 이 답 선택에서 정의된 범위를 벗어납니다. 답변 (C)가 올바르지 않습니다. 표준 대기에서 대류권계면의 온도는 -56.5¡C이며 이는 이 답 선택에서 정의된 온도보다 높습니다."
+      "en": "In a standard atmosphere, the tropopause has a temperature of -56.5°C and a height of about 36,000 feet above the Earth. While both the temperature and altitude ranges of the tropopause are quite large, this answer choice is the best answer to the question given its inclusion of the standard temperature for the tropopause. Answer (B) is incorrect. In a standard atmosphere, the tropopause has a temperature of -56.5°C, which is outside of the range defined by this answer choice. Answer (C) is incorrect. In a standard atmosphere, the tropopause has a temperature of -56.5°C, which is warmer than the temperature defined by this answer choice.",
+      "kr": "표준 대기에서 대류권계면의 온도는 -56.5℃이고 높이는 지구에서 약 36,000피트입니다. 대류권계면의 온도와 고도 범위는 모두 상당히 크지만, 이 답변 선택은 대류권계면의 표준 온도를 포함한다는 점을 고려하면 질문에 대한 최선의 답변입니다. 답 (B)가 틀렸습니다. 표준 대기에서 대류권계면의 온도는 -56.5°C이며 이는 이 답 선택에서 정의된 범위를 벗어납니다. 답변 (C)가 올바르지 않습니다. 표준 대기에서 대류권계면의 온도는 -56.5°C이며 이는 이 답 선택에서 정의된 온도보다 높습니다."
     }
   },
   {
