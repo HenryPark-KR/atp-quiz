@@ -29,11 +29,12 @@ h1{font-size:clamp(24px,4vw,32px);margin:0;color:#124c90}.subtitle{color:#64748b
 // ★ GitHub 저장소에 업로드한 실제 JSON 파일명으로 수정하세요.
 // files는 대체 후보 목록이며 왼쪽부터 순서대로 불러옵니다.
 const SUBJECTS = [
- {id:'atp',name:'ATP / 비행이론',files:['atp_problems_final_with_kr.json']},
+ {id:'atp',name:'ATP',files:['atp_problems_final_with_kr.json']},
+ {id:'atp',name:'비행이론',files:['Aerodynamic theory.json']},
  {id:'aim',name:'AIM',files:['aim.json','AIM.json']},
  {id:'navigation',name:'공중항법',files:['navigation.json','공중항법.json']},
  {id:'weather',name:'항공기상',files:['weather.json','항공기상.json']},
- {id:'law',name:'항공법규',files:['aviation_law.json','항공법규.json']}
+ {id:'law',name:'항공법규',files:['law.json','항공법규.json']}
 ];
 const STORAGE_KEY='aviationQuiz_v2';
 const $=id=>document.getElementById(id);
