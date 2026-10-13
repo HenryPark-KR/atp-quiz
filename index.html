@@ -518,6 +518,8 @@ const CloudModel=(()=>{
 // Google login + account-scoped local cache + optimistic cloud sync.
 const cloud={client:null,user:null,wire:CloudModel.empty(),base:CloudModel.empty(),revision:0,epoch:0,ready:false,busy:false,dirty:false,timer:null,serial:0,importGuest:null};
 const CLOUD_GUEST_KEY='aviationQuiz_v2';
+const cloudAuthReturn=(()=>{const q=new URLSearchParams(location.search),h=new URLSearchParams(location.hash.slice(1));return {code:q.has('code'),implicit:h.has('access_token'),error:q.get('error_code')||h.get('error_code')||q.get('error')||h.get('error'),description:q.get('error_description')||h.get('error_description')||''}})();
+function cloudAuthFailure(error){const code=String(error?.code||error?.details?.code||cloudAuthReturn.error||'login_failed').replace(/[^a-zA-Z0-9_-]/g,'').slice(0,60);const message=String(error?.message||cloudAuthReturn.description||'');let hint='다시 로그인해 주세요.';if(/exchange external code|invalid_client|client secret/i.test(message))hint='Google Client Secret 설정 확인이 필요합니다.';else if(/email from external provider/i.test(message))hint='Google 계정 이메일 확인에 실패했습니다.';else if(/verifier|flow.state|expired|pkce/i.test(message)||code==='callback_session_missing')hint='로그인을 시작했던 같은 브라우저에서 다시 시도해 주세요.';else if(code==='access_denied')hint='Google 로그인 허용 여부를 확인해 주세요.';cloudStatus('로그인 실패 · '+hint+' ['+code+']');$('cloud-login').disabled=false;}
 let cloudDevice;try{cloudDevice=localStorage.getItem('aviationQuiz_device_v1');if(!cloudDevice){cloudDevice=crypto.randomUUID();localStorage.setItem('aviationQuiz_device_v1',cloudDevice)}}catch{cloudDevice=Date.now().toString(36)+Math.random().toString(36).slice(2)}
 function cloudConfig(){return {url:document.querySelector('meta[name="supabase-url"]')?.content.trim()||'',key:document.querySelector('meta[name="supabase-publishable-key"]')?.content.trim()||''}}
 function cloudConfigured(){const c=cloudConfig();return /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(c.url)&&(c.key.startsWith('sb_publishable_')||c.key.startsWith('eyJ'))}
@@ -592,7 +594,7 @@ $('cloud-sync').onclick=()=>cloudSync();
 $('cloud-login').onclick=async()=>{
  if(!cloudConfigured()||!cloud.client){cloudStatus('로그인 기능은 연결 준비 중입니다. 지금은 기기에 저장됩니다.');return}
  pauseTimer();examPause();checkpoint();$('cloud-login').disabled=true;
- try{const {error}=await cloud.client.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(error)throw error}catch{cloudStatus('로그인을 시작하지 못했습니다. 다시 시도해 주세요.');$('cloud-login').disabled=false}
+ try{const {error}=await cloud.client.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname,scopes:'openid email profile'}});if(error)throw error}catch(error){cloudAuthFailure(error)}
 };
 $('cloud-logout').onclick=async()=>{
  if(!cloud.client)return;pauseTimer();examPause();checkpoint();cloudCapture();cloudPersist();
@@ -620,10 +622,11 @@ setInterval(()=>{if(cloud.user&&!document.hidden)cloudSync()},30000);
 async function initCloud(){
  cloudStatus(cloudConfigured()?'로그인 연결 중…':'로그인 준비 중 · 현재 기록은 이 기기에 저장됩니다');if(!cloudConfigured())return;
  try{if(!window.supabase)await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3';script.onload=resolve;script.onerror=reject;document.head.append(script)});
- const config=cloudConfig();if(!cloud.client){cloud.client=window.supabase.createClient(config.url,config.key,{global:{fetch:async(input,options={})=>{const controller=new AbortController(),abort=()=>controller.abort();options.signal?.addEventListener('abort',abort,{once:true});if(options.signal?.aborted)abort();const timeout=setTimeout(abort,20000);try{return await fetch(input,{...options,signal:controller.signal})}finally{clearTimeout(timeout);options.signal?.removeEventListener('abort',abort)}}}});
+ const config=cloudConfig();if(!cloud.client){cloud.client=window.supabase.createClient(config.url,config.key,{auth:{flowType:cloudAuthReturn.implicit?'implicit':'pkce',detectSessionInUrl:true,persistSession:true,autoRefreshToken:true,skipAutoInitialize:true},global:{fetch:async(input,options={})=>{const controller=new AbortController(),abort=()=>controller.abort();options.signal?.addEventListener('abort',abort,{once:true});if(options.signal?.aborted)abort();const timeout=setTimeout(abort,20000);try{return await fetch(input,{...options,signal:controller.signal})}finally{clearTimeout(timeout);options.signal?.removeEventListener('abort',abort)}}}});
  cloud.client.auth.onAuthStateChange((event,session)=>{setTimeout(()=>cloudSetUser(session?.user||null),0)});}
- const {data,error}=await cloud.client.auth.getSession();if(error)throw error;await cloudSetUser(data.session?.user||null);if(!data.session)cloudStatus('Google 로그인으로 여러 기기의 기록을 연결하세요');
- }catch{cloudStatus('로그인 연결 실패 · 현재 기록은 기기에 저장됩니다')}
+ const initialized=cloud.client.auth.initialize?await cloud.client.auth.initialize():{error:null};if(initialized.error)throw initialized.error;if(cloudAuthReturn.error)throw {code:cloudAuthReturn.error,message:cloudAuthReturn.description};
+ const {data,error}=await cloud.client.auth.getSession();if(error)throw error;if(!data.session&&(cloudAuthReturn.code||cloudAuthReturn.implicit))throw {code:'callback_session_missing',message:'OAuth callback did not create a session'};await cloudSetUser(data.session?.user||null);if(!data.session)cloudStatus('Google 로그인으로 여러 기기의 기록을 연결하세요');
+ }catch(error){cloudAuthFailure(error)}
 }
 store._guestDeviceId??=cloudDevice;cloudOriginalSave();
 initCloud();
