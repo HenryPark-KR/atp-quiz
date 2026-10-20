@@ -2940,76 +2940,6 @@
     "id": "SU05-Q005"
   },
   {
-    "question": "GIVEN:\nPressure altitude 12,000 ft\nTrue air temperature +50°F\nFrom the conditions given, the approximate density\naltitude is",
-    "choices": {
-      "A": "11,900 feet.",
-      "B": "14,130 feet.",
-      "C": "18,150 feet."
-    },
-    "answer": "B",
-    "explanation": {
-      "en": "To convert Fahrenheit to Celsius, use °C = (5/9) × (°F - 32). Thus, (5/9) × (50 - 32) = +10°C. Set pressure altitude 12,000 ft under true air temperature +10°C on the E6B. The indicated density altitude is approximately 14,130 ft.\n\nAnswer (A) is incorrect. This is the density altitude for - 10°C, not +10°C. Answer (C) is incorrect. This is the density for +50°C, not +50°F.\n\nSource: (E6B Instructions)",
-      "kr": "50°F는 10°C이다. E6B에서 기압고도 12,000 ft와 실제 기온 10°C를 맞추면 밀도고도는 약 14,130 ft이다."
-    },
-    "id": "SU05-Q006"
-  },
-  {
-    "question": "GIVEN:\nPressure altitude 5,000 ft\nTrue air temperature +30°C\nFrom the conditions given, the approximate density\naltitude is",
-    "choices": {
-      "A": "7,800 feet.",
-      "B": "7,200 feet.",
-      "C": "9,000 feet."
-    },
-    "answer": "A",
-    "explanation": {
-      "en": "On the center of the computer side of your flight computer, put the pressure altitude of 5,000 feet under the true air temperature of +30°C. The density altitude is indicated in the window as 7,800 feet.\n\nAnswer (B) is incorrect. This is the approximate density altitude at a temperature of 25°C, not 30°C. Answer (C) is incorrect. This is the approximate density altitude at a temperature of 42°C, not 30°C.\n\nSource: (E6B Instructions)",
-      "kr": "E6B에서 기압고도 5,000 ft와 실제 기온 30°C를 맞추면 밀도고도는 약 7,800 ft이다."
-    },
-    "id": "SU05-Q007"
-  },
-  {
-    "question": "GIVEN:\nPressure altitude 6,000 ft\nTrue air temperature +30°F\nFrom the conditions given, the approximate density\naltitude is",
-    "choices": {
-      "A": "9,000 feet.",
-      "B": "5,500 feet.",
-      "C": "5,000 feet."
-    },
-    "answer": "B",
-    "explanation": {
-      "en": "Use °C = (5/9) × (°F - 32). Thus, (5/9) × (30 - 32) ≈ -1°C. Set pressure altitude 6,000 ft under -1°C on the E6B. The indicated density altitude is approximately 5,500 ft.\n\nAnswer (A) is incorrect. This is the density altitude for +30°C, not +30°F. Answer (C) is incorrect. This is the density altitude for -5°C, not -1°C.\n\nSource: (E6B Instructions)",
-      "kr": "30°F는 약 -1°C이다. 기압고도 6,000 ft에서 이 온도를 적용하면 밀도고도는 약 5,500 ft이다."
-    },
-    "id": "SU05-Q008"
-  },
-  {
-    "question": "GIVEN:\nPressure altitude 12,000 feet\nTrue air temperature +15°F\nFrom the conditions given, the approximate density\naltitude is",
-    "choices": {
-      "A": "11,900 feet.",
-      "B": "14,130 feet.",
-      "C": "18,150 feet."
-    },
-    "answer": "A",
-    "explanation": {
-      "en": "To convert from °F to °C, use the bottom of the computer side of the E6B flight computer, where the temperature conversion scale is located. The bottom of the conversion scale is °F and the top of. the scale is °C. Find +15 on the °F side of the scale and you will see it is lined up about halfway between the first tick mark to the right of -10 of the °C scale. This is about -9.5°C. Therefore, +15°F = -9.5°C. On the center of the computer side of your flight computer, in the window to the right, put the pressure altitude of 12,000 feet under the air temperature of -9.5°C. The density altitude is indicated in the window as about 12,000 feet. The best and closest answer is 11,900 feet.\n\nAnswer (B) is incorrect. This is the density altitude for +50°F, not -9.5°C. Answer (C) is incorrect. This is the density altitude for +50°C, not +15°F.\n\nSource: (E6B Instructions)",
-      "kr": "15°F는 약 -9.5°C이다. 기압고도 12,000 ft와 함께 E6B에 적용하면 약 12,000 ft가 나오며, 가장 가까운 보기는 11,900 ft이다."
-    },
-    "id": "SU05-Q009"
-  },
-  {
-    "question": "GIVEN:\nPressure altitude 7,000 ft\nTrue air temperature +15°C\nFrom the conditions given, the approximate density\naltitude is",
-    "choices": {
-      "A": "5,000 feet.",
-      "B": "8,500 feet.",
-      "C": "9,500 feet."
-    },
-    "answer": "B",
-    "explanation": {
-      "en": "On the center of the computer side of your flight computer, put the pressure altitude of 7,000 feet under the ·true air temperature of +15°C. The density altitude is indicated in the window as 8,500 feet.\n\nAnswer (A) is incorrect. This is the density altitude for -15°C, not +15°C. Answer (C) is incorrect. This is the density altitude for +23°C, not +15°C.\n\nSource: (E6B Instructions)",
-      "kr": "기압고도 7,000 ft와 실제 기온 15°C를 E6B에 적용하면 밀도고도는 약 8,500 ft이다."
-    },
-    "id": "SU05-Q010"
-  },
-  {
     "question": "What effect does an uphill runway slope have on takeoff performance?",
     "choices": {
       "A": "Increases takeoff speed.",
@@ -6482,34 +6412,6 @@
     "id": "SU09-Q074"
   },
   {
-    "question": "GIVEN:\nTrue course 105°\nTrue heading 085°\nTrue airspeed 95 kts\nGroundspeed 87 kts\nDetermine the wind direction and speed.",
-    "choices": {
-      "A": "020° and 32 knots.",
-      "B": "030° and 38 knots.",
-      "C": "200° and 32 knots."
-    },
-    "answer": "A",
-    "explanation": {
-      "en": "To estimate your wind, given a true heading and a true course, simply use the wind side of your flight computer backwards. First, place your groundspeed of 87 kt. under the grommet with your true course of 105° under the true index. Since your true heading is 085°, you are holding a 20° left wind correction angle. Next, place a pencil mark on the 95-kt. true airspeed arc, 20° left of the centerline. Finally, rotate the wheel until the pencil mark is on the centerline, and read a wind of 020° (under the true index) at 32 kt. (up from the grommet).\n\nAnswer (B) is incorrect. A wind from 030° at 38 kt. would result in less wind correction and a slower groundspeed.\n\nAnswer (C) is incorrect. A wind from 200° at 32 kt. would result in a higher, not lower, groundspeed than airspeed.\n\nSource: (E6B)",
-      "kr": "진항로 105°에 진기수방향 085°이므로 왼쪽으로 20° 수정하고 있다. E6B에서 GS 87 kt와 TAS 95 kt를 역산하면 바람은 약 020°/32 kt이다."
-    },
-    "id": "SU09-Q075"
-  },
-  {
-    "question": "GIVEN:\nTrue course 345°\nTrue heading 355°\nTrue airspeed 85 kts\nGround speed 95 kts\nDetermine the wind direction and speed.",
-    "choices": {
-      "A": "095° and 19 knots.",
-      "B": "113° and 19 knots.",
-      "C": "238° and 18 knots."
-    },
-    "answer": "B",
-    "explanation": {
-      "en": "To estimate your wind, given a true heading and a true course, use the wind side of your flight computer backwards. First, place your groundspeed of 95 kt. under the grommet with your true course of 345° under the true index. Since your true heading is 355°, you are holding a 10° right wind correction angle. Next, place a pencil mark on the 85-kt. true airspeed arc, 10° right of centerline. Finally, rotate the wheel until the pencil mark is on the centerline, and read a wind of 113° (under the true index) at 19 kt. (up from the grommet).\n\nAnswer (A) is incorrect. A wind from 095° at 19 kt. would result in more wind correction angle and a slower groundspeed.\n\nAnswer (C) is incorrect. A wind from 238° at 18 kt. would require a left, not right, wind correction angle.\n\nSource: (E6B)",
-      "kr": "진항로 345°에 진기수방향 355°이므로 오른쪽으로 10° 수정하고 있다. GS 95 kt와 TAS 85 kt를 역산하면 바람은 약 113°/19 kt이다."
-    },
-    "id": "SU09-Q076"
-  },
-  {
     "question": "GIVEN:\nDistance off course 9 mi\nDistance flown 95 mi\nDistance to fly 125 mi\nTo converge at the destination, the total correction\nangle would be",
     "choices": {
       "A": "40.",
@@ -6536,90 +6438,6 @@
       "kr": "경로오차각은 6÷52×60≈6.92°, 목적지 수렴각은 6÷118×60≈3.05°이다. 합계 약 10°를 수정해야 목적지로 모인다."
     },
     "id": "SU09-Q078"
-  },
-  {
-    "question": "An airplane departs an airport under the\nfollowing conditions:\nAirport elevation 1000 ft\nCruise altitude 9,500 ft\nRate of climb 500 ft/min\nAverage true airspeed 135 kts\nTrue course 215°\nAverage wind velocity 290° at 20 kts\n3° w\nVariation\nDeviation -20\nAverage fuel consumption 13 gal/hr\nDetermine the approximate time, compass heading,\ndistance, and fuel consumed during the climb.",
-    "choices": {
-      "A": "14 minutes, 234°, 26 NM, 3.9 gallons.",
-      "B": "17 minutes, 224°, 36 NM, 3.7 gallons.",
-      "C": "17 minutes, 242°, 31 NM, 3.5 gallons."
-    },
-    "answer": "B",
-    "explanation": {
-      "en": "The requirement is the time, compass heading, distance, and fuel consumed during the climb. The airport elevation is 1,000 ft. and the climb is to 9,500 ft., which is a climb of 8,500 ft. At 500 fpm, this requires 17 min. In 17 min., the fuel burned would be 3.7 gal. [(17 / 60) x 13]. To determine the compass heading, first determine the true heading using the wind side of your flight computer. Then adjust the true heading to magnetic heading, and then to compass heading. To determine the distance, multiply the time by the groundspeed also found on the wind side of the computer.\n\nAnswer (A) is incorrect. The time required to climb is 17 min., not 14 min. Answer (C) is incorrect. The fuel used during 17 min. of climb is 3.7 gal., not 3.5 gal.\n\nSource: (E6B)",
-      "kr": "상승고도는 9,500-1,000=8,500 ft이고 시간은 8,500÷500=17분이다. 연료는 17÷60×13≈3.7 gal이며, E6B로 바람·편차·자차를 보정하면 224°와 약 36 NM를 얻는다."
-    },
-    "id": "SU09-Q079"
-  },
-  {
-    "question": "An airplane departs an airport under the\nfollowing conditions:\nAirport elevation 1,500 ft\nCruise altitude 9,500 ft\nRate of climb 500 ft/min\nAverage true airspeed 160 kts\nTrue course 145°\nAverage wind velocity 080° at 15 kts\nVariation 5° E\nDeviation -3°\nAverage fuel consumption 14 gal/hr\nDetermine the approximate time, compass heading,\ndistance, and fuel consumed during the climb.",
-    "choices": {
-      "A": "14 minutes, 128°, 35 NM, 3.2 gallons.",
-      "B": "16 minutes, 132°, 41 NM, 3.7 gallons.",
-      "C": "16 minutes, 128°, 32 NM, 3.8 gallons."
-    },
-    "answer": "B",
-    "explanation": {
-      "en": "The requirement is the time, compass heading, distance, and fuel consumed during the climb. The airport elevation is 1,500 ft. and the climb is to 9,500 ft., which is a climb of 8,000 ft. At 500 fpm, this requires 16 min., which narrows the answer choices down to two. In 16 min. at 14 gal./hr., just over one-fourth of 14 gal. would be burned, which is approximately 3.7 gal. To determine the compass heading, first determine the true heading using the wind side of your flight computer. Then adjust the true heading to magnetic heading, and then to compass heading. To determine the distance, multiply the time by the groundspeed also found on the wind side of the computer.\n\nAnswer (A) is incorrect. The time required to climb is 16 min., not 14 min. Answer (C) is incorrect. The fuel used during 16 min. of climb is 3.7 gal., not 3.8 gal.\n\nSource: (E6B)",
-      "kr": "상승고도는 9,500-1,500=8,000 ft로 16분이 필요하다. 연료는 16÷60×14≈3.7 gal이다. 진기수방향에 편차·자차를 적용하고 GS에 시간을 곱해 나머지 값을 구한다."
-    },
-    "id": "SU09-Q080"
-  },
-  {
-    "question": "GIVEN:\nWind 175° at 20 kts\nDistance 135 NM\nTrue course 075°\nTrue airspeed 80 kts\nFuel consumption 105 lb/hr\nDetermine the time en route and fuel consumption.",
-    "choices": {
-      "A": "1 hour 28 minutes and 73.2 pounds.",
-      "B": "1 hour 38 minutes and 158 pounds.",
-      "C": "1 hour 40 minutes and 175 pounds."
-    },
-    "answer": "C",
-    "explanation": {
-      "en": "Using the wind side of your flight computer, follow these steps: 1. Place the wind direction under the true index (175°). 2. Mark the wind velocity up from the grommet (+20 kt.). 3. Place the true course under the true index (75°). 4. Slide the wind velocity mark to the (80-kt.) TAS line, and the groundspeed is under the grommet which is 81 kt. Using the computer side, determine the time it takes to travel 135 NM by placing the index under 81 kt. and locating 135 NM on the outer scale. Under it is the time of 1 hr. 40 min. Next, place the index under 105 lb./hr. and locate 1 hr. 40 min. on the inner scale, and determine the fuel consumption on the outer scale to be 175 lb.\n\nAnswer (A) is incorrect. To travel 135 NM in 1 hr. and 28 min. would require a groundspeed of 92 kt., not 81 kt.\n\nAnswer (B) is incorrect. In 1 hr. and 38 min. at 105 lb./hr., the fuel consumption would be 171 lb., not 158 lb.\n\nSource: (E6B)",
-      "kr": "바람 175°/20 kt, 진항로 075°, TAS 80 kt를 E6B에 적용하면 GS는 약 81 kt이다. 135 NM는 약 1시간 40분이고, 연료는 105×100÷60=175 lb이다."
-    },
-    "id": "SU09-Q081"
-  },
-  {
-    "question": "An airplane descends to an airport under the\nfollowing conditions:\nCruising altitude 6,500 ft\nAirport elevation 700 ft\nDescends to 800 ft AGL\nRate of descent 500 ft/min\nAverage true airspeed 110 kts\nTrue course 335°\nAverage wind velocity 060° at 15 kts\nVariation 3°W\nDeviation +2°\nAverage fuel consumption 8.5 gal/hr\nDetermine the approximate time, compass heading,\ndistance, and fuel consumed during the descent.",
-    "choices": {
-      "A": "10 minutes, 348°, 18 NM, 1.4 gallons.",
-      "B": "10 minutes, 355°, 17 NM, 2.4 gallons.",
-      "C": "12 minutes, 346°, 18 NM, 1.6 gallons."
-    },
-    "answer": "A",
-    "explanation": {
-      "en": "A descent is to be made from 6,500 ft. to 1,500 ft. MSL (airport elevation of 700 ft. + 800 ft. AGL), which is a 5,000-ft. descent. At 500 fpm, it would take 10 min. Thus, the correct answer must either be 10 minutes, 348°, 18 NM, 1.4 gallons or 10 minutes, 355°, 17 NM, 2.4 gallons. At 8.5 gal./hr., 1.4 gal. would be burned in 10 min. (10/60 x 8.5). Thus, 10 minutes, 348°, 18 NM, 1.4 gallons is correct. Compute the compass heading by using the wind side of your flight computer. Convert true course to true heading based upon the wind effect. Then convert the true heading to magnetic heading by adjusting for the magnetic variation. The compass heading is determined by adjusting the magnetic heading for the compass deviation.\n\nAnswer (B) is incorrect. At 8.5 gal./hr., 1.4 gal., not 2.4 gal., would be used in 10 min. Answer (C) is incorrect. It would take approximately 12 min. to descend from 6,500 ft. MSL to the surface of the airport, not the level altitude of 1,500 ft. MSL (800 ft. AGL).\n\nSource: (E6B)",
-      "kr": "강하 목표는 700+800=1,500 ft MSL이다. 5,000 ft를 500 fpm으로 내려가므로 10분, 연료는 8.5×10÷60≈1.4 gal이다. 바람·편차·자차를 보정한 답은 348°·18 NM이다."
-    },
-    "id": "SU09-Q082"
-  },
-  {
-    "question": "An airplane descends to an airport under the\nfollowing conditions:\nCruising altitude 7,500 ft\nAirport elevation 1,300 ft\nDescends to 800 ft AGL\nRate of descent 300 ft/min\nAverage true airspeed 120 kts\nTrue course 165°\nAverage wind velocity 240° at 20 kts\nVariation 4°E\nDeviation -2°\nAverage fuel consumption 9.6 gal/hr\nDetermine the approximate time, compass heading,\ndistance, and fuel consumed during the descent.",
-    "choices": {
-      "A": "16 minutes, 168°, 30 NM, 2.9 gallons.",
-      "B": "18 minutes, 164°, 34 NM, 3.2 gallons.",
-      "C": "18 minutes, 168°, 34 NM, 2.9 gallons."
-    },
-    "answer": "C",
-    "explanation": {
-      "en": "A descent is to be made from 7,500 ft. to 2,100 ft. MSL (airport elevation of 1,300 ft. + 800 ft. AGL), which is a 5,400-ft. descent. At 300 fpm, it would take 18 min. Thus, the correct answer must either be 18 minutes, 164°, 34 NM, 3.2 gallons or 18 minutes, 168°, 34 NM, 2.9 gallons. Based on fuel consumption of 9.6 gal./hr., the fuel consumption would be 2.9 gal. (18/60 x 9.6), which makes the answer 18 minutes, 168°, 34 NM, 2.9 gallons correct. Compute the compass heading by using the wind side of your flight computer. Convert true course to true heading based upon the wind effect. Then convert the true heading to magnetic heading by adjusting for the magnetic variation. The compass heading is determined by adjusting the magnetic heading for the compass deviation.\n\nAnswer (A) is incorrect. The time to descend is 18 min., not 16 min. Answer (B) is incorrect. At 9.6 gal./hr., 2.9 gal., not 3.2 gal., would be used in 18 min.\n\nSource: (E6B)",
-      "kr": "목표고도는 1,300+800=2,100 ft MSL이다. 5,400 ft 강하에 18분이 걸리고 연료는 9.6×18÷60≈2.9 gal이다. 나머지 보정 결과 168°·34 NM가 된다."
-    },
-    "id": "SU09-Q083"
-  },
-  {
-    "question": "An airplane descends to an airport under the\nfollowing conditions:\nCruising altitude 10,500 ft\nAirport elevation 1,700 ft\nDescends to 1,000 ft AGL\nRate of descent 600 ft/min\nAverage true airspeed 135 kts\nTrue course 263°\nAverage wind velocity 330° at 30 kts\nVariation 7°E\nDeviation +3°\nAverage fuel consumption 11.5 gal/hr\nDetermine the approximate time, compass heading,\ndistance, and fuel consumed during the descent.",
-    "choices": {
-      "A": "9 minutes, 274°, 26 NM, 2.8 gallons.",
-      "B": "13 minutes, 274°, 28 NM, 2.5 gallons.",
-      "C": "13 minutes, 271°, 26 NM, 2.5 gallons."
-    },
-    "answer": "C",
-    "explanation": {
-      "en": "A descent is to be made from 10,500 ft. to 2,700 ft. MSL (airport elevation of 1,700 ft. + 1,000 ft. AGL), which is a 7,800-ft. descent. At 600 fpm, it would take 13 min. Thus, the correct answer must either be 13 minutes, 274°, 28 NM, 2.5 gallons or 13 minutes, 271°, 26 NM, 2.5 gallons and you must compute the compass heading. Place the wind direction of 330° under the true index. With a pencil, mark the wind velocity of 30 kt. above the grommet. Then turn the inner scale so that the true course of 263° is under the true index. Next, slide the wind scale such that the pencil mark is on the true airspeed of 135 kt, and note that the groundspeed is 121 kt. Also note that a 12° right correction is required. Thus, the true heading will be 275° (263° + 12°). To convert to magnetic, subtract the 7° easterly variation to get 268° (275° - 7°). Then add the compass deviation of 3° to determine the compass heading of 271° (268° + 3°). Thus, 13 minutes, 271°, 26 NM, 2.5 gallons is correct.\n\nAnswer (A) is incorrect. The time to descend is 13 min., not 9 min. Answer (B) is incorrect. The compass heading is 271°, not 274°.\n\nSource: (E6B)",
-      "kr": "7,800 ft를 600 fpm으로 강하하면 13분이다. E6B의 GS 약 121 kt, 오른쪽 수정각 약 12°를 적용해 진기수 275°를 얻는다. 동편차 7°를 빼고 자차 3°를 더하면 나침반기수 271°, 거리 약 26 NM·연료 약 2.5 gal이다."
-    },
-    "id": "SU09-Q084"
   },
   {
     "question": "When checking the course sensitivity of a VOR receiver, how many degrees should the OBS be rotated to move the CDI from the center to the last dot on either side?",
@@ -7334,34 +7152,6 @@
       "kr": "가능하다면 외부에서 접근하기 쉬운 곳 가까이에 비상착륙지를 선택한다. 필요한 경우 구조·도움을 받기 쉬워지기 때문이다."
     },
     "id": "SU11-Q032"
-  },
-  {
-    "question": "An airplane departs an airport under the following\nconditions:\nAirport elevation 1000 ft\nCruise altitude 9,500 ft\nRate of climb 500 ft/min\nAverage true airspeed 135 kts\nTrue course 215°\nAverage wind velocity 290° at 20 kts\nVariation 3° W\nDeviation -2°\nAverage fuel consumption 13 gal/hr\nDetermine the approximate time, compass heading,\ndistance, and fuel consumed during the climb.",
-    "choices": {
-      "A": "14 minutes, 234°, 26 NM, 3.9 gallons.",
-      "B": "17 minutes, 224°, 36 NM, 3.7 gallons.",
-      "C": "17 minutes, 242°, 31 NM, 3.5 gallons."
-    },
-    "answer": "B",
-    "explanation": {
-      "en": "The requirement is the time, compass heading, distance, and fuel consumed during the climb. The airport elevation is 1,000 ft. and the climb is to 9,500 ft., which is a climb of 8,500 ft. At 500 fpm, this requires 17 min. In 17 min., the fuel burned would be 3.7 gal. [(17 / 60) x 13]. To determine the compass heading, first determine the true heading using the wind side of your flight computer. Then adjust the true heading to magnetic heading, and then to compass heading. To determine the distance, multiply the time by the groundspeed also found on the wind side of the computer.\n\nAnswer (A) is incorrect. The time required to climb is 17 min., not 14 min. Answer (C) is incorrect. The fuel used during 17 min. of climb is 3.7 gal., not 3.5 gal.\n\nSource: (E6B)",
-      "kr": "상승고도는 9,500-1,000=8,500 ft이고 시간은 8,500÷500=17분이다. 연료는 17÷60×13≈3.7 gal이며, E6B로 바람·편차·자차를 보정하면 224°와 약 36 NM를 얻는다."
-    },
-    "id": "PRACTICE-Q004"
-  },
-  {
-    "question": "An airplane descends to an airport under the following\nconditions:\nCruising altitude 6,500 ft\nAirport elevation 700 ft\nDescends to 800 ft AGL\nRate of descent 500 ft/min\nAverage true airspeed 110 kts\nTrue course 335°\nAverage wind velocity 060° at 15 kts\nVariation 3°W\nDeviation +2°\nAverage fuel consumption 8.5 gal/hr\nDetermine the approximate time, compass heading,\ndistance, and fuel consumed during the descent.",
-    "choices": {
-      "A": "10 minutes, 348°, 18 NM, 1.4 gallons.",
-      "B": "10 minutes, 355°, 17 NM, 2.4 gallons.",
-      "C": "12 minutes, 346°, 18 NM, 1.6 gallons."
-    },
-    "answer": "A",
-    "explanation": {
-      "en": "A descent is to be made from 6,500 ft. to 1,500 ft. MSL (airport elevation of 700 ft. + 800 ft. AGL), which is a 5,000-ft. descent. At 500 fpm, it would take 10 min. Thus, the correct answer must either be 10 minutes, 348°, 18 NM, 1.4 gallons or 10 minutes, 355°, 17 NM, 2.4 gallons. At 8.5 gal./hr., 1.4 gal. would be burned in 10 min. (10/60 x 8.5). Thus, 10 minutes, 348°, 18 NM, 1.4 gallons is correct. Compute the compass heading by using the wind side of your flight computer. Convert true course to true heading based upon the wind effect. Then convert the true heading to magnetic heading by adjusting for the magnetic variation. The compass heading is determined by adjusting the magnetic heading for the compass deviation.\n\nAnswer (B) is incorrect. At 8.5 gal./hr., 1.4 gal., not 2.4 gal., would be used in 10 min. Answer (C) is incorrect. It would take approximately 12 min. to descend from 6,500 ft. MSL to the surface of the airport, not the level altitude of 1,500 ft. MSL (800 ft. AGL).\n\nSource: (E6B)",
-      "kr": "강하 목표는 700+800=1,500 ft MSL이다. 5,000 ft를 500 fpm으로 내려가므로 10분, 연료는 8.5×10÷60≈1.4 gal이다. 바람·편차·자차를 보정한 답은 348°·18 NM이다."
-    },
-    "id": "PRACTICE-Q005"
   },
   {
     "question": "If an airplane is consuming 14.8 gallons of fuel per hour at a cruising altitude of 7,500 feet and the groundspeed is 167 knots, how much fuel is required to travel 560 NM?",
@@ -8482,19 +8272,5 @@
       "kr": "접근경로 유지를 위해 출력과 수직속도를 크게 조정해야 한다면 윈드시어를 의심한다. 이것이 접근 중 쉽게 알아차릴 수 있는 중요한 단서이다."
     },
     "id": "PRACTICE-Q099"
-  },
-  {
-    "question": "GIVEN:\nPressure altitude 5,000 ft\nTrue air temperature +30°C\nFrom the conditions given, the approximate density altitude\nis",
-    "choices": {
-      "A": "7,800 feet.",
-      "B": "7,200 feet.",
-      "C": "9,000 feet."
-    },
-    "answer": "A",
-    "explanation": {
-      "en": "On the center of the computer side of your flight computer, put the pressure altitude of 5,000 feet under the true air temperature of +30°C. The density altitude is indicated in the window as 7,800 feet.\n\nAnswer (B) is incorrect. This is the approximate density altitude at a temperature of 25°C, not 30°C. Answer (C) is incorrect. This is the approximate density altitude at a temperature of 42°C, not 30°C.\n\nSource: (E6B Instructions)",
-      "kr": "E6B에서 기압고도 5,000 ft와 실제 기온 30°C를 맞추면 밀도고도는 약 7,800 ft이다."
-    },
-    "id": "PRACTICE-Q100"
   }
 ]
