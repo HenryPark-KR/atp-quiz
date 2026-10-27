@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <title>🛫항공 필기 랜덤 문제풀이🛬</title>
 <!-- 전광판 문구 수정: 아래 LED_MESSAGE의 따옴표 안 내용만 바꾸세요. -->
-<script>const LED_MESSAGE = "안녕 · 아이찡입니다 · 이거 내 이모찌야 -_- · 공채 대비 문제 싸이트 · 입니다  ";</script>
+<script>const LED_MESSAGE = "안녕 · 아이찡입니다, 이거 내 이모찌야 🤨 · 공채 대비 문제 싸이트 · TEST  ";</script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
@@ -1090,7 +1090,7 @@ function evaluateStudyExpression(input){
  const canvas=document.getElementById('led-canvas'),button=document.getElementById('led-pause'),ctx=canvas.getContext('2d');if(!ctx)return;
  document.querySelector('.led-accessible').textContent=LED_MESSAGE;
  const reduce=matchMedia('(prefers-reduced-motion: reduce)');let paused=reduce.matches,visible=true,frame=null,last=0,offset=0,tile=null,back=null,w=0,h=0,cycle=1;
- const pitch=3,parts=LED_MESSAGE.split(' · ').map((text,i)=>[(i?'  ·  ':'')+text,['#e4f1dd','#f5ca51','#8ed08b'][Math.min(i,2)]]);
+ const pitch=3,parts=LED_MESSAGE.split(' · ').map((text,i)=>[(i?'  ·  ':'')+text,['#e4f1dd','#f5ca51','#8ed08b','#f07169'][i%4]]);
  function paint(){if(!back||!tile||!w)return;ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(back,0,0);const x=-Math.floor(offset/pitch)*pitch,d=canvas.width/w;ctx.drawImage(tile,Math.round(x*d),0);ctx.drawImage(tile,Math.round((x+cycle)*d),0);}
  function running(){return !paused&&visible&&!document.hidden&&document.documentElement.dataset.view!=='quiz'&&document.documentElement.dataset.view!=='exam'}
  function tick(now){frame=null;if(!running())return;if(last)offset=(offset+Math.min(80,now-last)*.033)%cycle;last=now;paint();frame=requestAnimationFrame(tick)}
