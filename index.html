@@ -189,6 +189,26 @@ html #scene-toggle.scene-control:after{content:'Ⅱ';font:12px system-ui}
 html #scene-toggle.scene-control[aria-pressed=true]:after{content:'▶';font-size:10px}
 :root[data-view="quiz"] .hero,:root[data-view="exam"] .hero{display:none!important;min-height:0;height:0;padding:0;margin:0;aspect-ratio:auto}
 </style>
+
+<style id="official-reference-search-styles">
+/* Lightweight Google search panel: follows the existing light/dark theme. */
+.reference-search{margin:18px 0 14px;padding:16px 18px;background:var(--soft);border:1px solid var(--line);border-radius:12px;color:var(--ink);min-width:0}
+.reference-search[hidden]{display:none!important}
+.reference-search-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.reference-search-heading>div{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px}
+.reference-search-heading strong{font-size:14px;font-weight:650;letter-spacing:-.02em}
+.reference-search-heading span,.reference-search-mark{font-size:11px;color:var(--muted)}
+.reference-search-mark{font-size:19px}
+.reference-search-label{display:block;font-size:11px;color:var(--muted);margin:0 0 5px}
+.reference-search-input{box-sizing:border-box;width:100%;min-height:43px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink);font:inherit;font-size:14px;line-height:1.5}
+.reference-search-input:focus-visible,.reference-search-scope:focus-visible{outline:2px solid var(--focus-accent,#3d7466);outline-offset:2px}
+.reference-search-actions{display:flex;align-items:center;gap:8px;margin-top:9px}
+.reference-search-scope-label{font-size:11px;color:var(--muted);flex:none}
+.reference-search-scope{flex:1;min-width:0;min-height:40px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink);font:inherit;font-size:12px;padding:7px 9px}
+.reference-search-submit{flex:none;min-height:40px!important;font-size:12px!important;padding:8px 12px!important;white-space:nowrap}
+.reference-search-note{font-size:11px;line-height:1.65;color:var(--muted);margin:10px 0 0}
+@media(max-width:500px){.reference-search{padding:14px;margin:14px 0}.reference-search-heading{margin-bottom:8px}.reference-search-heading strong{font-size:13px}.reference-search-heading span{font-size:10px}.reference-search-input{font-size:16px}.reference-search-actions{gap:6px;flex-wrap:wrap}.reference-search-scope-label{display:none}.reference-search-scope{font-size:12px}.reference-search-submit{padding:8px 10px!important;font-size:11px!important}.reference-search-note{font-size:10px}}
+</style>
 </head>
 <body>
 <main class="container">
@@ -199,10 +219,34 @@ html #scene-toggle.scene-control[aria-pressed=true]:after{content:'▶';font-siz
 <div class="tabs"><button class="tab active" id="tab-subjects">과목 선택</button><button class="tab" id="tab-daily">Daily 모의고사</button><button class="tab" id="tab-calendar">학습 캘린더</button><button class="tab" id="tab-guestbook" type="button">방명록</button></div>
 <aside class="mission" id="mission"><svg class="buddy cessna-buddy" id="buddy" viewBox="0 0 64 48" shape-rendering="crispEdges" role="img" aria-label="통통 튀는 세스나 정면 픽셀아트"><ellipse class="cessna-shadow" cx="32" cy="44" rx="17" ry="2" fill="#203a4b" opacity=".16"/><g class="cessna-airframe"><path fill="#344b60" d="M29 3h6v8h-6zM24 10h16v4h20v2h3v5H40v12h-3v6h-3v4h-4v-4h-3v-6h-3V21H1v-5h3v-2h20z"/><path fill="#e8eff1" d="M26 11h12v5H4v3h56v-3H38v-2H26zM26 20h12v12h-3v5h-6v-5h-3z"/><path fill="#fffdf5" d="M5 15h22v2H5zm32 0h22v2H37zM29 23h6v10h-6z"/><path fill="#6cb1c3" d="M27 12h4v7h-5v-4h1zm6 0h4v3h1v4h-5z"/><path fill="#bde5ed" d="M27 12h4v2h-4zm6 0h4v2h-4z"/><path fill="#438da5" d="M25 24h14v3H25zM5 18h19v2H5zm35 0h19v2H40z"/><path fill="#8c9da4" d="M13 21h2v3h2v3h2v3h-2v-2h-2v-3h-2zm36 0h2v4h-2v3h-2v2h-2v-3h2v-3h2zM24 33h3v7h-3zm13 0h3v7h-3z"/><path fill="#263947" d="M21 38h6v5h-6zm16 0h6v5h-6zm-8 3h6v4h-6z"/><g class="cessna-prop"><path fill="#40505c" d="M30 17h4v21h-4z"/><path fill="#d6e1e4" d="M31 18h2v5h-2zm0 14h2v5h-2z"/><path fill="#f4bd67" d="M30 17h4v2h-4zm0 17h4v4h-4z"/></g><path fill="#344b60" d="M28 24h8v7h-8z"/><path fill="#f8c976" d="M30 25h4v4h-4z"/></g></svg><div class="mission-copy"><p id="buddy-message" aria-live="polite">오늘도 한 문제부터, 함께 출발해요.</p><div class="goal-row"><label for="daily-goal">오늘 목표</label><select id="daily-goal"><option value="10">10문제</option><option value="20">20문제</option><option value="30">30문제</option><option value="50">50문제</option></select><span id="goal-count"></span><span id="study-streak"></span><button id="buddy-toggle" class="buddy-toggle" aria-pressed="false">응원 쉬기</button></div><div class="goal-track" role="progressbar" id="goal-track" aria-label="오늘 목표 진행"><div class="goal-fill" id="goal-fill"></div></div></div></aside>
  <section id="subjects-view"><h2>학습할 과목을 선택하세요</h2><div id="resume-box" class="resume-box hidden"></div><div id="subjects" class="subject-grid"></div><aside class="butter-break"><div><strong>머리 식힐 시간, 버터 랜딩 한 판?</strong><p>돌풍 속 3번의 착륙 · 공부 타이머는 잠시 쉬어요.</p></div><button id="butter-open-card" class="btn butter-open" type="button">🧈 잠깐 쉬기</button></aside><p id="load-note" class="status"></p><details class="original-fold"><summary><span>오답 복습</span><span class="original-fold-icon" aria-hidden="true">＋</span></summary><aside class="ai-review-card" aria-labelledby="ai-title-today"><div class="ai-review-heading"><div><span class="ai-eyebrow">AI STUDY NOTES</span><h3 id="ai-title-today">오늘의 오답, AI로 복습하기</h3><p id="ai-count-today" class="ai-count"></p></div><button id="ai-copy-today" class="btn primary" type="button">프롬프트 + 오답 복사</button></div><p class="ai-intro">틀린 문제를 모아 정답 검증과 개념 정리를 AI에 요청해 보세요. 일반 학습과 제출한 모의고사 오답을 함께 모으고, 같은 문제는 하나로 묶습니다.</p><details class="ai-help"><summary>처음이세요? 이렇게 사용하세요</summary><ol><li><strong>복사 버튼</strong>을 누르세요. 검증 요청문과 오답 내용이 한꺼번에 복사됩니다.</li><li>사용하는 <strong>AI의 새 대화창</strong>에 붙여넣고 전송하세요. 공식 근거 확인이 필요하면 웹 검색 기능을 켜 주세요.</li><li>AI가 정리한 <strong>정답·핵심 개념·오답 이유</strong>를 읽고, 맨 아래 확인 문제를 풀어보세요.</li><li>검증 보류 문제는 공식 근거를 확인한 뒤 학습하세요. 자료가 길면 AI에 “이어서 정리해 줘”라고 요청하세요.</li></ol><p>다른 날의 오답은 학습 캘린더에서 날짜를 선택하면 복사할 수 있습니다. 복사 버튼은 자료만 준비하며, AI로 보내는 것은 직접 붙여넣은 뒤 진행합니다.</p></details><p id="ai-status-today" class="ai-copy-status" role="status" aria-live="polite"></p><details id="ai-preview-today" class="ai-preview"><summary>복사할 내용 확인 · 수동 복사</summary><label class="ai-text-label" for="ai-text-today">AI에 붙여넣을 검증 프롬프트와 오답</label><textarea id="ai-text-today" readonly rows="10" spellcheck="false" placeholder="복사 버튼을 누르면 이곳에 자료가 표시됩니다."></textarea><button id="ai-download-today" class="btn hidden" type="button">텍스트 다운로드</button></details></aside></details><details class="original-fold"><summary><span>별표 문제 모음</span><span class="original-fold-icon" aria-hidden="true">＋</span></summary><aside class="ai-review-card" aria-labelledby="ai-title-starred"><div class="ai-review-heading"><div><span class="ai-eyebrow">AI STUDY NOTES</span><h3 id="ai-title-starred">별표 문제 모음</h3><p id="ai-count-starred" class="ai-count"></p></div><button id="ai-copy-starred" class="btn primary" type="button">프롬프트 + 별표 복사</button></div><p class="ai-intro">모르는 문제나 헷갈리는 문제에 ☆를 눌러 모아두세요. 정답 여부와 관계없이 저장되며, AI에 검증과 개념 설명을 요청할 수 있습니다.</p><details><summary>저장한 문제 보기 · 다시 풀기</summary><div id="starred-list"></div></details><details class="ai-help"><summary>처음이세요? 이렇게 사용하세요</summary><ol><li><strong>복사 버튼</strong>을 누르세요. 검증 요청문과 별표 문제이 한꺼번에 복사됩니다.</li><li>사용하는 <strong>AI의 새 대화창</strong>에 붙여넣고 전송하세요. 공식 근거 확인이 필요하면 웹 검색 기능을 켜 주세요.</li><li>AI가 정리한 <strong>정답·핵심 개념·오답 이유</strong>를 읽고, 맨 아래 확인 문제를 풀어보세요.</li><li>검증 보류 문제는 공식 근거를 확인한 뒤 학습하세요. 자료가 길면 AI에 “이어서 정리해 줘”라고 요청하세요.</li></ol><p>별표는 다시 누르면 해제됩니다. 모의고사의 ‘나중에 다시 보기’ 표시는 시험 안에서만 사용됩니다. 복사 버튼은 자료만 준비하며, AI로 보내는 것은 직접 붙여넣은 뒤 진행합니다.</p></details><p id="ai-status-starred" class="ai-copy-status" role="status" aria-live="polite"></p><details id="ai-preview-starred" class="ai-preview"><summary>복사할 내용 확인 · 수동 복사</summary><label class="ai-text-label" for="ai-text-starred">AI에 붙여넣을 검증 프롬프트와 별표 문제</label><textarea id="ai-text-starred" readonly rows="10" spellcheck="false" placeholder="복사 버튼을 누르면 이곳에 자료가 표시됩니다."></textarea><button id="ai-download-starred" class="btn hidden" type="button">텍스트 다운로드</button></details></aside></details></section>
- <section id="quiz-view" class="hidden"><div class="top"><h2 id="quiz-title"></h2><span id="mode-label" class="pill"></span></div><div class="summary"><span id="counter" class="pill"></span><span id="session-score" class="pill"></span></div><div id="question" class="question"></div><div id="choices" class="choices"></div><div id="explanation" class="explanation hidden"></div><div class="navigation reading-nav has-bookmark"><button id="star-quiz" class="btn star-nav-btn" type="button" aria-pressed="false" aria-label="별표 저장" title="별표 저장">☆</button><button class="btn" id="prev">이전</button><button class="btn primary" id="next">다음 문제</button><button class="btn" id="save-exit">저장 · 나가기</button></div><details class="reading-tools"><summary>복습 · 새 문제</summary><div class="navigation"><button class="btn" id="retry">이 과목 오답 복습</button><button class="btn" id="normal">새 랜덤 문제</button></div></details><p class="save-note" id="save-note">문제 위치와 답변은 자동 저장됩니다.</p><p id="quiz-error" class="error"></p><div class="report-link-row"><button id="report-quiz" class="report-link" type="button">문제 오류 보고</button></div></section>
+ <section id="quiz-view" class="hidden"><div class="top"><h2 id="quiz-title"></h2><span id="mode-label" class="pill"></span></div><div class="summary"><span id="counter" class="pill"></span><span id="session-score" class="pill"></span></div><div id="question" class="question"></div><div id="choices" class="choices"></div><div id="explanation" class="explanation hidden"></div><section id="reference-search-quiz" class="reference-search" aria-label="공식자료 구글 검색">
+  <div class="reference-search-heading"><div><strong>공식자료 검색</strong><span>Google · 현재 문제 자동 입력</span></div><span class="reference-search-mark" aria-hidden="true">↗</span></div>
+  <form id="reference-search-form-quiz" class="reference-search-form" role="search" autocomplete="off">
+    <label class="reference-search-label" for="reference-search-input-quiz">검색할 내용</label>
+    <input id="reference-search-input-quiz" name="q" class="reference-search-input" type="search" maxlength="500" enterkeyhint="search" placeholder="현재 문제를 불러오거나 검색어를 입력하세요" aria-label="검색어">
+    <div class="reference-search-actions">
+      <label class="reference-search-scope-label" for="reference-search-scope-quiz">검색 범위</label>
+      <select id="reference-search-scope-quiz" class="reference-search-scope" aria-label="검색 범위"><option value="official">공식자료 전체</option><option value="korea">국내 공식자료</option><option value="international">FAA·ICAO</option><option value="all">전체 웹</option></select>
+      <button class="btn primary reference-search-submit" type="submit">Google 검색 ↗</button>
+    </div>
+  </form>
+  <p class="reference-search-note">공식자료 검색은 해당 기관 사이트로 결과를 제한합니다. 검색결과는 새 탭에서 열리며, 검색어는 수정할 수 있습니다.</p>
+</section><div class="navigation reading-nav has-bookmark"><button id="star-quiz" class="btn star-nav-btn" type="button" aria-pressed="false" aria-label="별표 저장" title="별표 저장">☆</button><button class="btn" id="prev">이전</button><button class="btn primary" id="next">다음 문제</button><button class="btn" id="save-exit">저장 · 나가기</button></div><details class="reading-tools"><summary>복습 · 새 문제</summary><div class="navigation"><button class="btn" id="retry">이 과목 오답 복습</button><button class="btn" id="normal">새 랜덤 문제</button></div></details><p class="save-note" id="save-note">문제 위치와 답변은 자동 저장됩니다.</p><p id="quiz-error" class="error"></p><div class="report-link-row"><button id="report-quiz" class="report-link" type="button">문제 오류 보고</button></div></section>
 
  <section id="daily-view" class="hidden"><h2>Daily 모의고사</h2><div class="exam-setup"><h3 id="daily-date"></h3><p><span id="daily-format"></span><br>시간 제한 없이 진행하며, 정답은 제출 후 공개됩니다.<br>문제 순서와 답변은 자동 저장됩니다. 나갔다 돌아오면 이어풀 수 있습니다.</p><button class="btn primary" id="daily-start">오늘 모의고사 시작</button><p id="daily-error" class="error"></p></div><h3>저장한 시험과 결과</h3><div id="daily-history"></div></section>
- <section id="exam-view" class="hidden"><div class="top"><h2 id="exam-title"></h2><span class="exam-clock" id="exam-clock">00:00:00</span></div><div class="summary"><span class="pill" id="exam-progress"></span><span class="pill" id="exam-state"></span></div><div id="exam-result" class="exam-result hidden"></div><div class="exam-layout"><div class="exam-main"><div id="exam-position" class="status"></div><div id="exam-question" class="question"></div><div id="exam-choices" class="choices"></div><div id="exam-explanation" class="explanation hidden"></div><div class="report-link-row"><button id="report-exam" class="report-link" type="button">문제 오류 보고</button></div><div class="exam-toolbar reading-nav exam-reading-nav has-bookmark"><button id="star-exam" class="btn star-nav-btn" type="button" aria-pressed="false" aria-label="별표 저장" title="별표 저장">☆</button><button class="btn" id="exam-prev">이전</button><button class="btn primary" id="exam-next">다음 문제</button><button class="btn primary" id="exam-submit">제출</button></div><div class="exam-toolbar exam-extra"><button class="btn" id="exam-flag">☆ 나중에 다시 보기</button><button class="btn" id="exam-pause">일시정지</button><button class="btn" id="exam-save">저장 · 나가기</button><button class="btn" id="exam-wrong">이 시험 오답만 보기</button></div></div><aside class="exam-sidebar"><details class="exam-map" id="exam-map" open><summary>문제 번호 · 바로 이동</summary><div id="exam-numbers" class="exam-numbers" aria-label="문제 번호 목록"></div><p class="exam-legend">진한 배경: 답변 완료<br>밑줄: 다시 보기 표시<br>빈 번호: 미응답</p></details></aside></div></section>
+ <section id="exam-view" class="hidden"><div class="top"><h2 id="exam-title"></h2><span class="exam-clock" id="exam-clock">00:00:00</span></div><div class="summary"><span class="pill" id="exam-progress"></span><span class="pill" id="exam-state"></span></div><div id="exam-result" class="exam-result hidden"></div><div class="exam-layout"><div class="exam-main"><div id="exam-position" class="status"></div><div id="exam-question" class="question"></div><div id="exam-choices" class="choices"></div><div id="exam-explanation" class="explanation hidden"></div><section id="reference-search-exam" class="reference-search" aria-label="공식자료 구글 검색" hidden>
+  <div class="reference-search-heading"><div><strong>공식자료 검색</strong><span>Google · 현재 문제 자동 입력</span></div><span class="reference-search-mark" aria-hidden="true">↗</span></div>
+  <form id="reference-search-form-exam" class="reference-search-form" role="search" autocomplete="off">
+    <label class="reference-search-label" for="reference-search-input-exam">검색할 내용</label>
+    <input id="reference-search-input-exam" name="q" class="reference-search-input" type="search" maxlength="500" enterkeyhint="search" placeholder="현재 문제를 불러오거나 검색어를 입력하세요" aria-label="검색어">
+    <div class="reference-search-actions">
+      <label class="reference-search-scope-label" for="reference-search-scope-exam">검색 범위</label>
+      <select id="reference-search-scope-exam" class="reference-search-scope" aria-label="검색 범위"><option value="official">공식자료 전체</option><option value="korea">국내 공식자료</option><option value="international">FAA·ICAO</option><option value="all">전체 웹</option></select>
+      <button class="btn primary reference-search-submit" type="submit">Google 검색 ↗</button>
+    </div>
+  </form>
+  <p class="reference-search-note">공식자료 검색은 해당 기관 사이트로 결과를 제한합니다. 검색결과는 새 탭에서 열리며, 검색어는 수정할 수 있습니다.</p>
+</section><div class="report-link-row"><button id="report-exam" class="report-link" type="button">문제 오류 보고</button></div><div class="exam-toolbar reading-nav exam-reading-nav has-bookmark"><button id="star-exam" class="btn star-nav-btn" type="button" aria-pressed="false" aria-label="별표 저장" title="별표 저장">☆</button><button class="btn" id="exam-prev">이전</button><button class="btn primary" id="exam-next">다음 문제</button><button class="btn primary" id="exam-submit">제출</button></div><div class="exam-toolbar exam-extra"><button class="btn" id="exam-flag">☆ 나중에 다시 보기</button><button class="btn" id="exam-pause">일시정지</button><button class="btn" id="exam-save">저장 · 나가기</button><button class="btn" id="exam-wrong">이 시험 오답만 보기</button></div></div><aside class="exam-sidebar"><details class="exam-map" id="exam-map" open><summary>문제 번호 · 바로 이동</summary><div id="exam-numbers" class="exam-numbers" aria-label="문제 번호 목록"></div><p class="exam-legend">진한 배경: 답변 완료<br>밑줄: 다시 보기 표시<br>빈 번호: 미응답</p></details></aside></div></section>
 
  <section id="calendar-view" class="hidden"><h2>학습 캘린더</h2><p class="status">날짜를 클릭하면 풀이 횟수와 틀린 문제를 확인할 수 있습니다.</p><div class="calendar-bar"><button class="btn" id="month-prev" aria-label="이전 달">◀</button><strong id="month-label"></strong><button class="btn" id="month-next" aria-label="다음 달">▶</button></div><div class="calendar" id="calendar"></div><div class="detail"><h3 id="day-title"></h3><div id="day-summary" class="summary"></div><details class="original-fold"><summary><span>선택한 날의 오답 복습</span><span class="original-fold-icon" aria-hidden="true">＋</span></summary><aside class="ai-review-card" aria-labelledby="ai-title-day"><div class="ai-review-heading"><div><span class="ai-eyebrow">AI STUDY NOTES</span><h3 id="ai-title-day">선택한 날의 오답, AI로 복습하기</h3><p id="ai-count-day" class="ai-count"></p></div><button id="ai-copy-day" class="btn primary" type="button">프롬프트 + 오답 복사</button></div><p class="ai-intro">틀린 문제를 모아 정답 검증과 개념 정리를 AI에 요청해 보세요. 일반 학습과 제출한 모의고사 오답을 함께 모으고, 같은 문제는 하나로 묶습니다.</p><details class="ai-help"><summary>처음이세요? 이렇게 사용하세요</summary><ol><li><strong>복사 버튼</strong>을 누르세요. 검증 요청문과 오답 내용이 한꺼번에 복사됩니다.</li><li>사용하는 <strong>AI의 새 대화창</strong>에 붙여넣고 전송하세요. 공식 근거 확인이 필요하면 웹 검색 기능을 켜 주세요.</li><li>AI가 정리한 <strong>정답·핵심 개념·오답 이유</strong>를 읽고, 맨 아래 확인 문제를 풀어보세요.</li><li>검증 보류 문제는 공식 근거를 확인한 뒤 학습하세요. 자료가 길면 AI에 “이어서 정리해 줘”라고 요청하세요.</li></ol><p>다른 날의 오답은 학습 캘린더에서 날짜를 선택하면 복사할 수 있습니다. 복사 버튼은 자료만 준비하며, AI로 보내는 것은 직접 붙여넣은 뒤 진행합니다.</p></details><p id="ai-status-day" class="ai-copy-status" role="status" aria-live="polite"></p><details id="ai-preview-day" class="ai-preview"><summary>복사할 내용 확인 · 수동 복사</summary><label class="ai-text-label" for="ai-text-day">AI에 붙여넣을 검증 프롬프트와 오답</label><textarea id="ai-text-day" readonly rows="10" spellcheck="false" placeholder="복사 버튼을 누르면 이곳에 자료가 표시됩니다."></textarea><button id="ai-download-day" class="btn hidden" type="button">텍스트 다운로드</button></details></aside></details><div id="day-wrongs"></div></div><div class="navigation"><button class="btn" id="export">학습 기록 백업(JSON)</button><label class="btn" for="import-file" style="cursor:pointer">백업 복원</label><input type="file" id="import-file" accept="application/json,.json" class="hidden"><button class="btn danger" id="clear-history" type="button">전체 학습기록 초기화</button></div><p class="notice">게스트 기록은 현재 기기에 저장됩니다. 로그인하면 계정별로 자동 동기화되며, 오프라인 기록은 연결 후 전송됩니다. 로그아웃하면 게스트 기록으로 돌아갑니다. 브라우저 데이터 삭제 전에는 동기화 완료 여부를 확인하고 주기적으로 백업하세요.</p></section>
 <section id="guestbook-view" class="hidden" aria-labelledby="guestbook-title">
@@ -1128,6 +1172,62 @@ function evaluateStudyExpression(input){
 </script>
 <script>
 (function(){const settings=document.getElementById('focus-settings'),panel=document.getElementById('study-tools-panel');settings.addEventListener('toggle',()=>{if(settings.open&&!panel.hidden){document.getElementById('st-close').onclick();settings.querySelector('summary').focus({preventScroll:true})}});})();
+</script>
+
+<script id="official-reference-search-script">
+// No API key is used; Google opens only after a user-triggered submit.
+(function(){
+  'use strict';
+  const SOURCE_GROUPS = Object.freeze({
+    official:['law.go.kr','molit.go.kr','aim.koca.go.kr','faa.gov','icao.int'],
+    korea:['law.go.kr','molit.go.kr','aim.koca.go.kr'],
+    international:['faa.gov','icao.int'],
+    all:[]
+  });
+  const $ref=id=>document.getElementById(id);
+  const states={quiz:{lastId:null},exam:{lastId:null}};
+  function questionFor(mode){
+    if(mode==='quiz')return (typeof queue!=='undefined'&&queue.length)?queue[index]:null;
+    const e=typeof currentExam==='function'?currentExam():null;
+    if(!e||e.status!=='submitted')return null;
+    return typeof examList==='function'?examList()[e.index]:null;
+  }
+  function refresh(mode){
+    const wrapper=$ref('reference-search-'+mode),input=$ref('reference-search-input-'+mode);
+    if(!wrapper||!input)return;
+    const p=questionFor(mode);
+    wrapper.hidden=!p;
+    if(!p){states[mode].lastId=null;input.value='';return;}
+    // Preserve manual edits after a choice is selected or the same question rerenders.
+    const id=String(p.id||'')+'|'+p.question;
+    if(states[mode].lastId!==id){
+      states[mode].lastId=id;
+      input.value=String(p.question||'').replace(/\s+/g,' ').trim().slice(0,500);
+    }
+  }
+  function doSearch(event,mode){
+    event.preventDefault();
+    const input=$ref('reference-search-input-'+mode);
+    const q=input.value.replace(/\s+/g,' ').trim();
+    if(!q){input.focus();return;}
+    const key=$ref('reference-search-scope-'+mode).value;
+    const domains=SOURCE_GROUPS[key]||SOURCE_GROUPS.official;
+    const sites=domains.length?' ('+domains.map(d=>'site:'+d).join(' OR ')+')':'';
+    const url=new URL('https://www.google.com/search');
+    url.searchParams.set('q',q+sites);
+    url.searchParams.set('hl','ko');
+    window.open(url.toString(),'_blank','noopener,noreferrer');
+  }
+  for(const mode of ['quiz','exam']){
+    $ref('reference-search-form-'+mode).addEventListener('submit',e=>doSearch(e,mode));
+  }
+  const previousRenderQuestion=renderQuestion;
+  renderQuestion=function(){previousRenderQuestion();refresh('quiz')};
+  const previousRenderExam=renderExam;
+  renderExam=function(){previousRenderExam();refresh('exam')};
+  // Avoid relying on the initial script load ordering.
+  refresh('quiz');refresh('exam');
+})();
 </script>
 </body>
 </html>
