@@ -348,11 +348,35 @@ async function loadBank(s){
 function showView(which){for(const name of ['subjects','quiz','calendar'])$(name+'-view').classList.toggle('hidden',name!==which);$('tab-subjects').classList.toggle('active',which!=='calendar');$('tab-calendar').classList.toggle('active',which==='calendar');if(which==='calendar')renderCalendar()}
 function subjectCards(){renderResumes();const box=$('subjects');box.replaceChildren();SUBJECTS.forEach(s=>{const b=document.createElement('button');b.className='subject';const label=document.createElement('strong');label.textContent=s.name;const no=document.createElement('span');no.className='subject-no';no.textContent='SUBJECT '+String(SUBJECTS.indexOf(s)+1).padStart(2,'0');const small=document.createElement('small');small.textContent=banks[s.id]?`${banks[s.id].length}문제 준비됨`:'선택하면 문제 불러오기';if(store.sessions?.[s.id])small.textContent='이어풀기 · '+(store.sessions[s.id].index+1)+'번째 문제';b.append(no,label,small);b.onclick=()=>startSubject(s);box.appendChild(b)})}
 async function startSubject(s, fresh=false){pauseTimer();checkpoint();$('load-note').textContent=`${s.name} 문제를 불러오는 중...`;try{const list=await loadBank(s);subject=s;if(fresh||!restoreSession(s,list)){retryMode=false;queue=shuffle(list);index=0;answered={};sessionRight=0;sessionTotal=0;}showView('quiz');renderQuestion();$('load-note').textContent='';subjectCards()}catch(e){$('load-note').textContent=`불러오기 실패: ${e.message}`;subjectCards()}}
-function renderQuestion(){checkpoint();if(!queue.length){$('question').textContent='풀 문제가 없습니다.';$('choices').replaceChildren();$('explanation').classList.add('hidden');$('counter').textContent='0 / 0';return}
- index=Math.max(0,Math.min(index,queue.length-1));const p=queue[index];$('quiz-title').textContent=subject.name;$('mode-label').textContent=retryMode?'오답 복습':'무작위 문제';$('counter').textContent=`${index+1} / ${queue.length}`;$('session-score').textContent=`이번 학습: ${sessionTotal}문제 · 정답 ${sessionRight}개`;$('question').textContent=p.question;$('quiz-error').textContent='';
+// A resolved wrong-answer question remains visible until the learner finishes reading
+// its answer, then is removed from the active review queue on navigation.
+function isLiveSubjectRetry(){return retryMode&&!!subject&&SUBJECTS.some(s=>s.id===subject.id)}
+function pruneResolvedRetryQuestions(direction='next'){
+ if(!isLiveSubjectRetry()||!queue.length)return false;
+ const active=new Set(store.wrongIds),original=queue,kept=original.filter(p=>active.has(p.id));
+ if(kept.length===original.length)return false;
+ const after=original.slice(index+1).find(p=>active.has(p.id));
+ const before=original.slice(0,index).reverse().find(p=>active.has(p.id));
+ const target=direction==='prev'?before||after:after||before;
+ queue=kept;index=target?kept.findIndex(p=>p.id===target.id):0;
+ const remaining=new Set(kept.map(p=>p.id));
+ for(const id of Object.keys(answered))if(!remaining.has(id))delete answered[id];
+ return true;
+}
+function renderQuestion(){checkpoint();if(!queue.length){
+ $('quiz-title').textContent=subject?.name||'오답 복습';$('mode-label').textContent=retryMode?'오답 복습 완료':'문제 없음';
+ $('question').textContent=retryMode?'이번 복습에서 남은 오답이 없습니다.':'풀 문제가 없습니다.';
+ $('choices').replaceChildren();$('explanation').classList.add('hidden');$('explanation').textContent='';
+ $('counter').textContent='0 / 0';$('session-score').textContent=`이번 학습: ${sessionTotal}문제 · 정답 ${sessionRight}개`;
+ $('prev').disabled=true;$('next').disabled=false;$('next').textContent='과목 선택으로';return}
+
+ index=Math.max(0,Math.min(index,queue.length-1));const p=queue[index];$('quiz-title').textContent=subject.name;const resolved=isLiveSubjectRetry()&&!store.wrongIds.includes(p.id);
+ $('mode-label').textContent=resolved?'오답 복습 · 해제 완료':retryMode?'오답 복습':'무작위 문제';
+ $('counter').textContent=`${index+1} / ${queue.length}`+(isLiveSubjectRetry()?` · 남은 오답 ${queue.filter(p=>store.wrongIds.includes(p.id)).length}개`:'');$('session-score').textContent=`이번 학습: ${sessionTotal}문제 · 정답 ${sessionRight}개`;$('question').textContent=p.question;$('quiz-error').textContent='';
  const box=$('choices');box.replaceChildren();const choiceKeys=Object.keys(p.choices).sort();const selected=answered[p.id];for(const key of choiceKeys){const btn=document.createElement('button');btn.className='choice';btn.textContent=`${key}. ${p.choices[key]}`;if(selected){btn.disabled=true;if(key===p.answer)btn.classList.add('correct');else if(key===selected)btn.classList.add('wrong')}else btn.onclick=()=>answer(key);box.append(btn)}
  $('explanation').classList.toggle('hidden',!selected);$('explanation').textContent=selected?`${selected===p.answer?'정답입니다.':'오답입니다.'} 정답: ${p.answer} (${p.choices[p.answer]})${p.explanation?'\n\n'+p.explanation:''}`:'';
- $('prev').disabled=index===0;$('next').textContent=index===queue.length-1?'처음부터 새 문제':'다음 문제';
+ $('prev').disabled=index===0;
+ $('next').textContent=isLiveSubjectRetry()?(resolved?'다음 오답으로':index===queue.length-1?'남은 오답 다시 풀기':'다음 문제'):(index===queue.length-1?'처음부터 새 문제':'다음 문제');
 }
 function answer(choice){const p=queue[index];if(!p||answered[p.id])return;answered[p.id]=choice;const right=choice===p.answer;sessionTotal++;if(right)sessionRight++;
  store.attempts.push({date:today(),time:new Date().toISOString(),subject:p.subject,id:p.id,question:p.question,selected:choice,correctAnswer:p.answer,selectedText:p.choices[choice],correctText:p.choices[p.answer],choices:{...p.choices},explanation:p.explanation||'',correct:right,...(retryMode?{mode:'retry'}:{})});
@@ -360,7 +384,24 @@ function answer(choice){const p=queue[index];if(!p||answered[p.id])return;answer
 function startRetry(){const wrong=queueForWrong();if(!wrong.length){alert('이 과목에서 복습할 오답이 없습니다.');return}retryMode=true;queue=shuffle(wrong);index=0;answered={};sessionTotal=0;sessionRight=0;renderQuestion()}
 function queueForWrong(){return (banks[subject.id]||[]).filter(p=>store.wrongIds.includes(p.id))}
 function newSet(){if(subject?.id==='daily-review'||subject?.id==='starred-review'){queue=shuffle(queue);index=0;answered={};sessionRight=0;sessionTotal=0;renderQuestion();return}retryMode=false;queue=shuffle(banks[subject.id]);index=0;answered={};sessionRight=0;sessionTotal=0;renderQuestion()}
-function next(){if(index<queue.length-1){index++;renderQuestion()}else if(confirm('마지막 문제입니다. 새로운 무작위 문제 순서로 다시 시작할까요?'))newSet()}
+function next(){
+ if(!queue.length){subjectCards();showView('subjects');return}
+ if(isLiveSubjectRetry()){
+  const current=queue[index],resolved=!store.wrongIds.includes(current.id);
+  const hasFollowing=queue.slice(index+1).some(p=>store.wrongIds.includes(p.id));
+  const pruned=pruneResolvedRetryQuestions('next');
+  if(!queue.length){renderQuestion();return}
+  if(pruned){
+   // When there are no later unanswered cards, begin a fresh pass over remaining mistakes.
+   if(resolved&&!hasFollowing&&answered[queue[index]?.id]){startRetry();return}
+   renderQuestion();return;
+  }
+  if(index<queue.length-1){index++;renderQuestion();return}
+  startRetry();return;
+ }
+ if(index<queue.length-1){index++;renderQuestion()}
+ else if(confirm('마지막 문제입니다. 새로운 무작위 문제 순서로 다시 시작할까요?'))newSet();
+}
 function element(tag,cls,content){const el=document.createElement(tag);if(cls)el.className=cls;if(content!==undefined)el.textContent=content;return el}
 function renderCalendar(){const yr=viewedMonth.getFullYear(),mo=viewedMonth.getMonth();$('month-label').textContent=`${yr}년 ${mo+1}월`;const grid=$('calendar');grid.replaceChildren();['일','월','화','수','목','금','토'].forEach(n=>grid.append(element('div','weekday',n)));
  for(let i=0;i<new Date(yr,mo,1).getDay();i++)grid.append(element('div','day empty',''));
@@ -407,7 +448,10 @@ renderTimer();
 
 function validSessions(raw){const out={};if(!raw||typeof raw!=='object')return out;for(const s of SUBJECTS){const v=raw[s.id];if(!v||!Array.isArray(v.order)||!Number.isInteger(v.index)||v.index<0||v.index>=v.order.length)continue;out[s.id]={order:[...new Set(v.order.filter(x=>typeof x==='string'))],index:v.index,retryMode:!!v.retryMode,answered:Object.fromEntries(Object.entries(v.answered||{}).filter(([k,a])=>typeof k==='string'&&/^[A-F]$/.test(a))),timerElapsed:Math.max(0,Number(v.timerElapsed)||0),savedAt:typeof v.savedAt==='string'?v.savedAt:''};}return out}
 function checkpoint(){if(!subject||!queue.length)return true;store.sessions??={};store.sessions[subject.id]={order:queue.map(p=>p.id),index,answered:{...answered},retryMode,timerElapsed,savedAt:new Date().toISOString()};const ok=save();if($('save-note'))$('save-note').textContent=ok?'문제 순서 · 위치 · 답변 자동 저장됨':'저장 실패 · 학습 기록 백업을 이용해 주세요.';return ok}
-function restoreSession(s,list){const saved=store.sessions?.[s.id];if(!saved)return false;const map=new Map(list.map(p=>[p.id,p]));queue=saved.order.map(id=>map.get(id)).filter(Boolean);if(!queue.length)return false;const current=saved.order[saved.index];index=Math.max(0,queue.findIndex(p=>p.id===current));answered={};for(const p of queue){const a=saved.answered[p.id];if(p.choices[a])answered[p.id]=a}retryMode=saved.retryMode;sessionTotal=Object.keys(answered).length;sessionRight=queue.filter(p=>answered[p.id]===p.answer).length;pauseTimer();timerElapsed=saved.timerElapsed||0;breakMark=Math.floor(timerElapsed/1500)*1500;renderTimer();speak('저장한 위치로 돌아왔어요. 한 문제씩 이어가요.');return true}
+function restoreSession(s,list){const saved=store.sessions?.[s.id];if(!saved)return false;const map=new Map(list.map(p=>[p.id,p]));queue=saved.order.map(id=>map.get(id)).filter(Boolean);
+ // Old saved review sessions can contain questions already cleared on another device.
+ if(saved.retryMode){const unresolved=new Set(store.wrongIds);queue=queue.filter(p=>unresolved.has(p.id))}
+ if(!queue.length)return false;const current=saved.order[saved.index];index=Math.max(0,queue.findIndex(p=>p.id===current));answered={};for(const p of queue){const a=saved.answered[p.id];if(p.choices[a])answered[p.id]=a}retryMode=saved.retryMode;sessionTotal=Object.keys(answered).length;sessionRight=queue.filter(p=>answered[p.id]===p.answer).length;pauseTimer();timerElapsed=saved.timerElapsed||0;breakMark=Math.floor(timerElapsed/1500)*1500;renderTimer();speak('저장한 위치로 돌아왔어요. 한 문제씩 이어가요.');return true}
 function renderResumes(){const box=$('resume-box');if(!box)return;box.replaceChildren();const entries=SUBJECTS.filter(s=>store.sessions?.[s.id]);box.classList.toggle('hidden',!entries.length);if(!entries.length)return;box.append(element('div','resume-title','이어서 공부하기 · 과목을 누르면 저장한 위치로 돌아갑니다'));for(const s of entries){const v=store.sessions[s.id];const b=element('button','btn',s.name+' · '+(v.index+1)+' / '+v.order.length);b.onclick=()=>startSubject(s);box.append(b)}}
 let cheerHandle=null,breakMark=0;
 function speak(message,motion=''){if(store.buddyQuiet)return;$('buddy-message').textContent=message;$('buddy').classList.remove('cheer','think');void $('buddy').offsetWidth;if(motion)$('buddy').classList.add(motion);clearTimeout(cheerHandle);cheerHandle=setTimeout(()=>$('buddy').classList.remove('cheer','think'),1500)}
@@ -416,7 +460,7 @@ function motivate(right){renderMotivation();const count=store.attempts.filter(a=
 store.sessions=validSessions(store.sessions);store.dailyGoal=[10,20,30,50].includes(store.dailyGoal)?store.dailyGoal:20;
 $('daily-goal').onchange=()=>{store.dailyGoal=Number($('daily-goal').value);save();renderMotivation()};$('buddy-toggle').onclick=()=>{store.buddyQuiet=!store.buddyQuiet;save();renderMotivation()};$('save-exit').onclick=()=>{pauseTimer();if(!checkpoint())return;subjectCards();showView('subjects');speak('여기까지 저장했어요. 다음에 이 위치에서 다시 만나요.')};renderMotivation();
 
-$('home-btn').onclick=()=>{subjectCards();showView('subjects')};$('tab-subjects').onclick=()=>{subjectCards();showView('subjects')};$('tab-calendar').onclick=()=>showView('calendar');$('prev').onclick=()=>{if(index>0){index--;renderQuestion()}};$('next').onclick=next;$('retry').onclick=startRetry;$('normal').onclick=()=>{if(confirm('저장된 이 과목의 문제 순서와 위치를 새로 시작할까요? 학습 기록은 유지됩니다.'))newSet()};
+$('home-btn').onclick=()=>{subjectCards();showView('subjects')};$('tab-subjects').onclick=()=>{subjectCards();showView('subjects')};$('tab-calendar').onclick=()=>showView('calendar');$('prev').onclick=()=>{if(pruneResolvedRetryQuestions('prev')){renderQuestion();return}if(index>0){index--;renderQuestion()}};$('next').onclick=next;$('retry').onclick=startRetry;$('normal').onclick=()=>{if(confirm('저장된 이 과목의 문제 순서와 위치를 새로 시작할까요? 학습 기록은 유지됩니다.'))newSet()};
 $('month-prev').onclick=()=>{viewedMonth.setMonth(viewedMonth.getMonth()-1);renderCalendar()};$('month-next').onclick=()=>{viewedMonth.setMonth(viewedMonth.getMonth()+1);renderCalendar()};$('export').onclick=exportData;$('clear-history').onclick=clearAllHistory;$('import-file').onchange=e=>importData(e.target.files?.[0]);subjectCards();
 // Date-seeded daily exam. Question snapshots preserve old tests after bank updates.
 let examKey=null,examRunning=false,examLast=0,examHandle=null,examReviewWrong=false;
@@ -891,8 +935,11 @@ function cloudResetRuntime(){
 function cloudExpand(){
  const metadata=store._cloud;store=CloudModel.expand(cloud.wire);if(metadata)store._cloud=metadata;
  // Refresh active views without moving the learner to a different question.
- if(subject&&queue.length){const v=store.sessions?.[subject.id];if(v&&CloudModel.hash(v.order)===CloudModel.hash(queue.map(p=>p.id)))answered={...v.answered,...answered};sessionTotal=Object.keys(answered).length;sessionRight=queue.filter(p=>answered[p.id]===p.answer).length;renderQuestion()}
- if(examKey&&store.dailyExams[examKey])renderExam();subjectCards();renderMotivation();renderCalendar();renderTimer();renderExamLobby();
+  // A remote device may already have cleared a question; do not resurrect it visually.
+  if(isLiveSubjectRetry()&&queue.length&&!answered[queue[index]?.id])pruneResolvedRetryQuestions();
+  if(subject&&queue.length){const v=store.sessions?.[subject.id];if(v&&CloudModel.hash(v.order)===CloudModel.hash(queue.map(p=>p.id)))answered={...v.answered,...answered};sessionTotal=Object.keys(answered).length;sessionRight=queue.filter(p=>answered[p.id]===p.answer).length;renderQuestion()}
+ if(subject&&isLiveSubjectRetry()&&!queue.length&&document.documentElement.dataset.view==='quiz')renderQuestion();
+  if(examKey&&store.dailyExams[examKey])renderExam();subjectCards();renderMotivation();renderCalendar();renderTimer();renderExamLobby();
 }
 function cloudStash(label){try{localStorage.setItem('aviationQuiz_recovery_'+Date.now(),JSON.stringify({label,ownerId:cloud.user?.id||'guest',exportedAt:new Date().toISOString(),...store}));$('cloud-recovery').classList.remove('hidden')}catch{}}
 async function cloudRead(){const {data,error}=await cloud.client.from('quiz_cloud_state').select('revision,epoch,state,updated_at').eq('user_id',cloud.user.id).maybeSingle();if(error)throw error;return data||{revision:0,epoch:0,state:CloudModel.empty()}}
