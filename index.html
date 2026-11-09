@@ -355,7 +355,7 @@ function renderQuestion(){checkpoint();if(!queue.length){$('question').textConte
  $('prev').disabled=index===0;$('next').textContent=index===queue.length-1?'처음부터 새 문제':'다음 문제';
 }
 function answer(choice){const p=queue[index];if(!p||answered[p.id])return;answered[p.id]=choice;const right=choice===p.answer;sessionTotal++;if(right)sessionRight++;
- store.attempts.push({date:today(),time:new Date().toISOString(),subject:p.subject,id:p.id,question:p.question,selected:choice,correctAnswer:p.answer,selectedText:p.choices[choice],correctText:p.choices[p.answer],choices:{...p.choices},explanation:p.explanation||'',correct:right});
+ store.attempts.push({date:today(),time:new Date().toISOString(),subject:p.subject,id:p.id,question:p.question,selected:choice,correctAnswer:p.answer,selectedText:p.choices[choice],correctText:p.choices[p.answer],choices:{...p.choices},explanation:p.explanation||'',correct:right,...(retryMode?{mode:'retry'}:{})});
  if(!right){if(!store.wrongIds.includes(p.id))store.wrongIds.push(p.id)}else if(retryMode){store.wrongIds=store.wrongIds.filter(id=>id!==p.id)}save();renderQuestion();motivate(right)}
 function startRetry(){const wrong=queueForWrong();if(!wrong.length){alert('이 과목에서 복습할 오답이 없습니다.');return}retryMode=true;queue=shuffle(wrong);index=0;answered={};sessionTotal=0;sessionRight=0;renderQuestion()}
 function queueForWrong(){return (banks[subject.id]||[]).filter(p=>store.wrongIds.includes(p.id))}
@@ -797,6 +797,26 @@ const CloudModel=(()=>{
   for(const k of ['dailyGoal','buddyQuiet'])w.prefs[k]=stamp(store[k]??(k==='dailyGoal'?20:false),previous.prefs[k],previous.prefs[k]?clock:(store._guestDeviceId?'0001|guest':'0000|default'));
   for(const [id,entry] of Object.entries(validBookmarks(store.bookmarks))){const key='bookmark:'+id;w.prefs[key]=stamp(entry,previous.prefs[key],entry.updatedAt+'|'+device)}
   for(const [key,v] of Object.entries(previous.prefs||{}))if(key.startsWith('bookmark:')&&!w.prefs[key])w.prefs[key]=v;
+  // Explicit wrong-list state is necessary: a correct RANDOM attempt does not clear
+  // an earlier wrong answer, whereas a correct RETRY attempt does.
+  // Store last-writer-wins state for historically incorrect problems only.
+  const wrongNow=new Set((store.wrongIds||[]).map(String));
+  const knownWrong=new Set([...wrongNow]);
+  const lastAttempt={};
+  for(const a of store.attempts||[]){
+   if(!a||a.id==null)continue;
+   const id=String(a.id),time=String(a.time||a.date||'');
+   if(!a.correct)knownWrong.add(id);
+   if(!lastAttempt[id]||time>lastAttempt[id])lastAttempt[id]=time;
+  }
+  for(const key of Object.keys(previous.prefs||{}))if(key.startsWith('wrong:'))knownWrong.add(key.slice(6));
+  for(const id of knownWrong){
+   const key='wrong:'+id;
+   // When importing historical records, use the original attempt time for a first
+   // snapshot so an old backup cannot override newer progress from another device.
+   const seedClock=(lastAttempt[id]||clock.split('|')[0])+'|'+device;
+   w.prefs[key]=stamp(wrongNow.has(id),previous.prefs[key],previous.prefs[key]?clock:seedClock);
+  }
   return w;
  }
  function merge(a,b){
@@ -824,7 +844,13 @@ const CloudModel=(()=>{
    const p=w.problems[a.ref];if(!p)continue;s.attempts.push({...clone(p),...clone(a),correctAnswer:a.correctAnswer||p.answer,selectedText:a.selectedText||p.choices[a.selected]||'',correctText:a.correctText||p.choices[a.correctAnswer]||'',_aid:aid,_ref:a.ref});
   }
   s.attempts.sort((a,b)=>String(a.time||a.date).localeCompare(String(b.time||b.date))||a._aid.localeCompare(b._aid));
-  const wrong=new Set();for(const a of s.attempts){if(!a.correct)wrong.add(a.id);else wrong.delete(a.id)}s.wrongIds=[...wrong];
+  // Legacy states have no explicit wrong-list flags; replay them conservatively.
+  // Only correct answers in retry mode clear the list.
+  const wrong=new Set();for(const a of s.attempts){if(!a.correct)wrong.add(a.id);else if(a.mode==='retry')wrong.delete(a.id)}
+  for(const [key,v] of Object.entries(w.prefs||{}))if(key.startsWith('wrong:')){
+   if(v.value===true)wrong.add(key.slice(6));else if(v.value===false)wrong.delete(key.slice(6));
+  }
+  s.wrongIds=[...wrong];
   for(const [id,v] of Object.entries(w.sessions))s.sessions[id]=clone(v.value);
   for(const [date,e] of Object.entries(w.exams)){const questions=e.refs.map(r=>w.problems[r]);if(questions.some(p=>!p))continue;s.dailyExams[date]={questions:clone(questions),answers:Object.fromEntries(Object.entries(e.answers).map(([k,v])=>[k,v.value])),flags:Object.entries(e.flags).filter(([k,v])=>v.value).map(([k])=>k),...clone(e.position.value),status:e.status,submittedAt:e.submittedAt,createdAt:e.createdAt};}
   s.bookmarks={};for(const [key,v] of Object.entries(w.prefs||{}))if(key.startsWith('bookmark:'))s.bookmarks[key.slice(9)]=clone(v.value);
